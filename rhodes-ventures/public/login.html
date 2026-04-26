@@ -4,135 +4,252 @@
 <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <title>Sign In — Rhodes Ventures</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --purple-900:#1e0a4a; --purple-800:#3d1a80; --purple-600:#6d40c4;
-    --purple-400:#9b7fe8; --purple-100:#f0ecff; --purple-200:#d9d0ff;
-    --text:#1a1025; --text-soft:#8a7fa0; --rule:#e8e4f0; --white:#fff; --off:#fafafa;
+    --purple-900:#1e0a4a;--purple-800:#3d1a80;--purple-600:#6d40c4;
+    --purple-400:#9b7fe8;--purple-200:#d9d0ff;--purple-100:#f0ecff;
+    --text:#1a1025;--text-mid:#4a4060;--text-soft:#8a7fa0;
+    --rule:#e8e4f0;--white:#fff;--off:#fafafa;
   }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--text); min-height: 100vh; display: flex; }
-  .split { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
-  .left {
-    background: linear-gradient(160deg, var(--purple-900) 0%, var(--purple-800) 35%, var(--purple-600) 65%, #c4a8f5 85%, var(--white) 100%);
-    display: flex; align-items: center; justify-content: center; padding: 60px;
-    position: relative; overflow: hidden;
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--off);color:var(--text);min-height:100vh;display:flex;}
+
+  /* Split layout */
+  .split{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;width:100%;}
+  .left{
+    background:linear-gradient(160deg,var(--purple-900) 0%,var(--purple-800) 35%,var(--purple-600) 65%,#c4a8f5 85%,var(--white) 100%);
+    display:flex;align-items:center;justify-content:center;padding:60px;
+    position:relative;overflow:hidden;
   }
-  .left-grid {
-    position: absolute; inset: 0; pointer-events: none;
-    background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-    background-size: 50px 50px;
+  .left-grid{position:absolute;inset:0;pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);
+    background-size:50px 50px;}
+  .left-content{position:relative;z-index:1;color:white;max-width:360px;}
+
+  /* Logo — clickable, goes home */
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:48px;text-decoration:none;color:white;}
+  .brand-mark{width:40px;height:40px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);
+    border-radius:10px;display:flex;align-items:center;justify-content:center;
+    font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;flex-shrink:0;
+    transition:background 0.2s;}
+  .brand:hover .brand-mark{background:rgba(255,255,255,0.25);}
+  .brand-text strong{display:block;font-size:13px;font-weight:600;}
+  .brand-text span{font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:0.08em;text-transform:uppercase;}
+  .left-title{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;line-height:1.1;margin-bottom:16px;}
+  .left-title em{font-style:italic;}
+  .left-desc{font-size:14px;color:rgba(255,255,255,0.65);line-height:1.75;}
+
+  /* Right panel */
+  .right{display:flex;align-items:center;justify-content:center;padding:60px;overflow-y:auto;}
+  .form-box{width:100%;max-width:400px;}
+
+  /* Back link */
+  .back-link{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--text-soft);
+    text-decoration:none;margin-bottom:32px;transition:color 0.2s;}
+  .back-link:hover{color:var(--purple-600);}
+  .back-link svg{width:16px;height:16px;}
+
+  .form-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;margin-bottom:6px;}
+  .form-sub{font-size:13px;color:var(--text-soft);margin-bottom:36px;}
+  .form-sub a{color:var(--purple-600);text-decoration:none;font-weight:600;}
+  .form-sub a:hover{text-decoration:underline;}
+
+  /* Server status pill */
+  .server-status{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;
+    border-radius:100px;border:1px solid var(--rule);font-size:11px;font-weight:600;
+    letter-spacing:0.05em;margin-bottom:24px;background:var(--white);}
+  .status-dot{width:7px;height:7px;border-radius:50%;}
+  .dot-checking{background:#f59e0b;animation:blink 1s infinite;}
+  .dot-ok{background:#22c55e;}
+  .dot-fail{background:#dc2626;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+  label{display:block;font-size:11px;font-weight:700;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--text-soft);margin-bottom:8px;}
+  .inp{width:100%;padding:13px 16px;border:1px solid var(--rule);border-radius:10px;
+    background:var(--white);color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;
+    outline:none;transition:border-color 0.2s;margin-bottom:20px;}
+  .inp:focus{border-color:var(--purple-400);}
+  .inp.has-error{border-color:#dc2626;background:#fef2f2;}
+
+  .field-err{font-size:11px;color:#dc2626;margin-top:-16px;margin-bottom:14px;display:none;}
+  .field-err.show{display:block;}
+
+  .err-box{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;
+    padding:13px 16px;border-radius:10px;font-size:13px;margin-bottom:20px;
+    display:none;line-height:1.5;}
+  .err-box.show{display:block;}
+
+  .submit{width:100%;padding:14px;background:var(--purple-800);color:white;
+    border:none;border-radius:10px;font-size:14px;font-weight:700;
+    letter-spacing:0.04em;cursor:pointer;transition:background 0.2s,opacity 0.2s;margin-top:4px;}
+  .submit:hover{background:var(--purple-600);}
+  .submit:disabled{opacity:0.55;pointer-events:none;}
+
+  .divider{display:flex;align-items:center;gap:12px;margin:24px 0;color:var(--text-soft);font-size:12px;}
+  .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--rule);}
+
+  .alt-link{display:block;text-align:center;font-size:13px;color:var(--text-soft);}
+  .alt-link a{color:var(--purple-600);font-weight:600;text-decoration:none;}
+  .alt-link a:hover{text-decoration:underline;}
+
+  @media(max-width:700px){
+    .split{grid-template-columns:1fr;}
+    .left{display:none;}
+    .right{padding:32px 24px;align-items:flex-start;}
   }
-  .left-content { position: relative; z-index: 1; color: white; max-width: 380px; }
-  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 48px; }
-  .brand-mark { width: 38px; height: 38px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 700; }
-  .brand-text strong { display: block; font-size: 13px; font-weight: 600; }
-  .brand-text span { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 0.08em; text-transform: uppercase; }
-  .left-title { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; line-height: 1.1; margin-bottom: 20px; }
-  .left-title em { font-style: italic; }
-  .left-desc { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.75; }
-  .right { display: flex; align-items: center; justify-content: center; padding: 60px; }
-  .form-box { width: 100%; max-width: 400px; }
-  .form-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; margin-bottom: 6px; }
-  .form-sub { font-size: 13px; color: var(--text-soft); margin-bottom: 36px; }
-  .form-sub a { color: var(--purple-600); text-decoration: none; font-weight: 600; }
-  label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 8px; }
-  .inp {
-    width: 100%; padding: 13px 16px;
-    border: 1px solid var(--rule); border-radius: 10px;
-    background: var(--white); color: var(--text);
-    font-size: 14px; font-family: 'DM Sans', sans-serif;
-    outline: none; transition: border-color 0.2s;
-    margin-bottom: 20px;
-  }
-  .inp:focus { border-color: var(--purple-400); }
-  .inp.error { border-color: #dc2626; }
-  .submit {
-    width: 100%; padding: 14px;
-    background: var(--purple-800); color: white;
-    border: none; border-radius: 10px;
-    font-size: 14px; font-weight: 700; letter-spacing: 0.04em;
-    cursor: pointer; transition: background 0.2s, transform 0.2s;
-    margin-top: 4px;
-  }
-  .submit:hover { background: var(--purple-600); }
-  .submit:active { transform: scale(0.99); }
-  .submit:disabled { opacity: 0.6; pointer-events: none; }
-  .err-msg { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 20px; display: none; }
-  .err-msg.show { display: block; }
-  .divider { text-align: center; margin: 24px 0; font-size: 12px; color: var(--text-soft); }
-  .register-link { display: block; text-align: center; margin-top: 24px; font-size: 13px; color: var(--text-soft); }
-  .register-link a { color: var(--purple-600); font-weight: 600; text-decoration: none; }
-  @media(max-width:700px){.split{grid-template-columns:1fr;}.left{display:none;}.right{padding:40px 24px;}}
 </style>
 </head>
 <body>
 <div class="split">
+
+  <!-- LEFT PANEL -->
   <div class="left">
     <div class="left-grid"></div>
     <div class="left-content">
-      <div class="brand">
+      <a href="/index.html" class="brand">
         <div class="brand-mark">R</div>
         <div class="brand-text">
           <strong>Rhodes University</strong>
           <span>Centre for Entrepreneurship</span>
         </div>
-      </div>
+      </a>
       <h2 class="left-title">Your venture,<br/><em>your story.</em></h2>
-      <p class="left-desc">Sign in to manage your venture profile, track your entrepreneurship journey, and be discovered by investors, mentors, and collaborators.</p>
+      <p class="left-desc">Sign in to manage your venture profile, track your entrepreneurship journey, and be discovered by investors, mentors, and collaborators across the ecosystem.</p>
     </div>
   </div>
+
+  <!-- RIGHT PANEL -->
   <div class="right">
     <div class="form-box">
-      <h1 class="form-title">Welcome back</h1>
+
+      <a href="/index.html" class="back-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back to homepage
+      </a>
+
+      <!-- Server status -->
+      <div class="server-status" id="server-status">
+        <div class="status-dot dot-checking" id="status-dot"></div>
+        <span id="status-text">Checking connection…</span>
+      </div>
+
+      <h1 class="form-title">Welcome back.</h1>
       <p class="form-sub">Don't have an account? <a href="/register.html">Register your venture →</a></p>
 
-      <div class="err-msg" id="err"></div>
+      <div class="err-box" id="err"></div>
 
-      <form id="login-form" onsubmit="handleLogin(event)">
+      <form id="login-form" onsubmit="handleLogin(event)" novalidate>
         <label for="email">Email Address</label>
-        <input class="inp" id="email" type="email" placeholder="student@ru.ac.za" autocomplete="email" required />
+        <input class="inp" id="email" type="email" placeholder="you@ru.ac.za" autocomplete="email" />
+        <div class="field-err" id="err-email"></div>
 
         <label for="password">Password</label>
-        <input class="inp" id="password" type="password" placeholder="••••••••" autocomplete="current-password" required />
+        <input class="inp" id="password" type="password" placeholder="••••••••" autocomplete="current-password" />
+        <div class="field-err" id="err-password"></div>
 
         <button class="submit" id="submit-btn" type="submit">Sign In →</button>
       </form>
 
-      <p class="register-link">New to Rhodes Ventures? <a href="/register.html">Create your account</a></p>
+      <div class="divider">or</div>
+      <p class="alt-link">New to Rhodes Ventures? <a href="/register.html">Create your account</a></p>
     </div>
   </div>
+
 </div>
 
 <script src="/auth.js"></script>
 <script>
 requireGuest();
 
+// ─── SERVER STATUS CHECK ─────────────────────────────────────────
+(async () => {
+  const dot  = document.getElementById('status-dot');
+  const text = document.getElementById('status-text');
+  const pill = document.getElementById('server-status');
+
+  const health = await checkServerHealth();
+
+  if (health.status === 'ok' && health.db === 'connected') {
+    dot.className  = 'status-dot dot-ok';
+    text.textContent = 'Server connected';
+    pill.style.borderColor = '#bbf7d0';
+    pill.style.background  = '#f0fdf4';
+    pill.style.color = '#166534';
+  } else if (health.status === 'ok' && health.db === 'disconnected') {
+    dot.className  = 'status-dot dot-fail';
+    text.textContent = 'Database not connected — check Replit Secrets (MONGO_URI)';
+    pill.style.borderColor = '#fecaca';
+    pill.style.background  = '#fef2f2';
+    pill.style.color = '#dc2626';
+    // Show explanation in error box
+    const err = document.getElementById('err');
+    err.innerHTML = `<strong>Database not connected.</strong> The server is running but MongoDB is not connected. Go to your Replit project → <strong>Secrets (padlock icon)</strong> → make sure <code>MONGO_URI</code> is set correctly. Then restart the Repl.`;
+    err.classList.add('show');
+  } else {
+    dot.className  = 'status-dot dot-fail';
+    text.textContent = 'Server unreachable';
+    pill.style.borderColor = '#fecaca';
+    pill.style.background  = '#fef2f2';
+    pill.style.color = '#dc2626';
+  }
+})();
+
+// ─── VALIDATION ──────────────────────────────────────────────────
+function clearErrors() {
+  ['email','password'].forEach(f => {
+    document.getElementById(`err-${f}`).classList.remove('show');
+    document.getElementById(f).classList.remove('has-error');
+  });
+  document.getElementById('err').classList.remove('show');
+}
+
+function fieldError(field, msg) {
+  const el = document.getElementById(field);
+  const err = document.getElementById(`err-${field}`);
+  el.classList.add('has-error');
+  err.textContent = msg;
+  err.classList.add('show');
+  el.focus();
+}
+
+// ─── SUBMIT ──────────────────────────────────────────────────────
 async function handleLogin(e) {
   e.preventDefault();
-  const btn = document.getElementById('submit-btn');
-  const err = document.getElementById('err');
-  btn.disabled = true;
+  clearErrors();
+
+  const email    = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const btn      = document.getElementById('submit-btn');
+  const errBox   = document.getElementById('err');
+
+  // Validate
+  let hasError = false;
+  if (!email) {
+    fieldError('email', 'Please enter your email address.'); hasError = true;
+  }
+  if (!password) {
+    fieldError('password', 'Please enter your password.'); hasError = true;
+  }
+  if (hasError) return;
+
+  btn.disabled    = true;
   btn.textContent = 'Signing in…';
-  err.classList.remove('show');
 
   try {
     const data = await apiFetch('/api/auth/login', {
       method: 'POST',
-      body: JSON.stringify({
-        email: document.getElementById('email').value.trim(),
-        password: document.getElementById('password').value,
-      })
+      body: JSON.stringify({ email, password }),
     });
     saveSession(data.token, data.user);
-    // Redirect to next page if specified in URL, otherwise dashboard
     const params = new URLSearchParams(window.location.search);
     window.location.href = params.get('next') || '/dashboard.html';
   } catch (ex) {
-    err.textContent = ex.message;
-    err.classList.add('show');
-    btn.disabled = false;
+    errBox.textContent = ex.message;
+    errBox.classList.add('show');
+    btn.disabled    = false;
     btn.textContent = 'Sign In →';
   }
 }
