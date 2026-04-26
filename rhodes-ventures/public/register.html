@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>Register — Rhodes Ventures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --purple-900:#1e0a4a; --purple-800:#3d1a80; --purple-600:#6d40c4;
+    --purple-400:#9b7fe8; --purple-100:#f0ecff; --purple-200:#d9d0ff;
+    --text:#1a1025; --text-soft:#8a7fa0; --rule:#e8e4f0; --white:#fff; --off:#fafafa;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--text); min-height: 100vh; display: flex; }
+  .split { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+  .left {
+    background: linear-gradient(160deg, var(--purple-900) 0%, var(--purple-800) 35%, var(--purple-600) 65%, #c4a8f5 85%, var(--white) 100%);
+    display: flex; align-items: center; justify-content: center; padding: 60px;
+    position: relative; overflow: hidden;
+  }
+  .left-grid { position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px); background-size: 50px 50px; }
+  .left-content { position: relative; z-index: 1; color: white; max-width: 380px; }
+  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 48px; }
+  .brand-mark { width: 38px; height: 38px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 700; }
+  .brand-text strong { display: block; font-size: 13px; font-weight: 600; }
+  .brand-text span { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 0.08em; text-transform: uppercase; }
+  .left-title { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; line-height: 1.1; margin-bottom: 20px; }
+  .left-title em { font-style: italic; }
+  .left-desc { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.75; }
+  .steps { margin-top: 40px; display: flex; flex-direction: column; gap: 14px; }
+  .step-item { display: flex; gap: 14px; align-items: flex-start; }
+  .step-num { width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .step-text strong { display: block; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .step-text span { font-size: 12px; color: rgba(255,255,255,0.55); }
+  .right { display: flex; align-items: flex-start; justify-content: center; padding: 60px; overflow-y: auto; }
+  .form-box { width: 100%; max-width: 420px; }
+  .form-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; margin-bottom: 6px; }
+  .form-sub { font-size: 13px; color: var(--text-soft); margin-bottom: 36px; }
+  .form-sub a { color: var(--purple-600); text-decoration: none; font-weight: 600; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 8px; }
+  .inp { width: 100%; padding: 13px 16px; border: 1px solid var(--rule); border-radius: 10px; background: var(--white); color: var(--text); font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s; margin-bottom: 20px; }
+  .inp:focus { border-color: var(--purple-400); }
+  .sel { width: 100%; padding: 13px 16px; border: 1px solid var(--rule); border-radius: 10px; background: var(--white); color: var(--text); font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; appearance: none; margin-bottom: 20px; }
+  .submit { width: 100%; padding: 14px; background: var(--purple-800); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; transition: background 0.2s; margin-top: 4px; }
+  .submit:hover { background: var(--purple-600); }
+  .submit:disabled { opacity: 0.6; pointer-events: none; }
+  .err-msg { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 20px; display: none; }
+  .err-msg.show { display: block; }
+  .hint { font-size: 11px; color: var(--text-soft); margin-top: -16px; margin-bottom: 20px; }
+  .divider-label { font-size: 11px; color: var(--text-soft); letter-spacing: 0.08em; text-transform: uppercase; margin: 8px 0 20px; display: block; }
+  .test-row { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; padding: 14px 16px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; }
+  .test-row input { width: 16px; height: 16px; }
+  .test-row label { font-size: 12px; color: #92400e; margin: 0; text-transform: none; letter-spacing: 0; font-weight: 500; }
+  @media(max-width:700px){.split{grid-template-columns:1fr;}.left{display:none;}.right{padding:40px 24px;}}
+</style>
+</head>
+<body>
+<div class="split">
+  <div class="left">
+    <div class="left-grid"></div>
+    <div class="left-content">
+      <div class="brand">
+        <div class="brand-mark">R</div>
+        <div class="brand-text">
+          <strong>Rhodes University</strong>
+          <span>Centre for Entrepreneurship</span>
+        </div>
+      </div>
+      <h2 class="left-title">Get on<br/>the <em>map.</em></h2>
+      <p class="left-desc">Register your venture to be listed in the Rhodes entrepreneurship directory, access support, and be discovered by the ecosystem.</p>
+      <div class="steps">
+        <div class="step-item"><div class="step-num">1</div><div class="step-text"><strong>Create your account</strong><span>Uses your Rhodes email address</span></div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-text"><strong>Build your venture profile</strong><span>Complete at your own pace — saves automatically</span></div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-text"><strong>Go live in the directory</strong><span>Visible to investors, mentors, and collaborators</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="form-box">
+      <h1 class="form-title">Create account</h1>
+      <p class="form-sub">Already registered? <a href="/login.html">Sign in →</a></p>
+
+      <div class="err-msg" id="err"></div>
+
+      <form id="reg-form" onsubmit="handleRegister(event)">
+        <div class="row2">
+          <div>
+            <label for="firstName">First Name</label>
+            <input class="inp" id="firstName" type="text" placeholder="Thabo" required />
+          </div>
+          <div>
+            <label for="lastName">Last Name</label>
+            <input class="inp" id="lastName" type="text" placeholder="Molefe" required />
+          </div>
+        </div>
+
+        <label for="email">Rhodes Email Address</label>
+        <input class="inp" id="email" type="email" placeholder="g23m1234@campus.ru.ac.za" autocomplete="email" required />
+
+        <label for="studentNumber">Student Number</label>
+        <input class="inp" id="studentNumber" type="text" placeholder="g23m1234" />
+
+        <div class="row2">
+          <div>
+            <label for="faculty">Faculty</label>
+            <select class="sel" id="faculty">
+              <option value="">Select faculty</option>
+              <option>Commerce, Law and Management</option>
+              <option>Education</option>
+              <option>Humanities</option>
+              <option>Science</option>
+              <option>Pharmacy</option>
+              <option>Law</option>
+            </select>
+          </div>
+          <div>
+            <label for="yearOfStudy">Year of Study</label>
+            <select class="sel" id="yearOfStudy">
+              <option value="">Select year</option>
+              <option>1st Year</option>
+              <option>2nd Year</option>
+              <option>3rd Year</option>
+              <option>Honours</option>
+              <option>Masters</option>
+              <option>PhD</option>
+              <option>Recent Alumni</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="password">Password</label>
+        <input class="inp" id="password" type="password" placeholder="••••••••" autocomplete="new-password" required />
+        <p class="hint">Minimum 8 characters.</p>
+
+        <label for="password2">Confirm Password</label>
+        <input class="inp" id="password2" type="password" placeholder="••••••••" autocomplete="new-password" required />
+
+        <!-- Test user flag — only show in non-production or when admin is registering -->
+        <div class="test-row" id="test-row" style="display:none">
+          <input type="checkbox" id="isTestUser" />
+          <label for="isTestUser">Mark as test user (data will be clearable via admin panel)</label>
+        </div>
+
+        <button class="submit" id="submit-btn" type="submit">Create Account & Continue →</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="/auth.js"></script>
+<script>
+requireGuest();
+
+// Show test-user checkbox in development
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+  document.getElementById('test-row').style.display = 'flex';
+}
+
+async function handleRegister(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  const err = document.getElementById('err');
+  err.classList.remove('show');
+
+  const password  = document.getElementById('password').value;
+  const password2 = document.getElementById('password2').value;
+  if (password !== password2) {
+    err.textContent = 'Passwords do not match.';
+    err.classList.add('show');
+    return;
+  }
+  if (password.length < 8) {
+    err.textContent = 'Password must be at least 8 characters.';
+    err.classList.add('show');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Creating account…';
+
+  try {
+    const data = await apiFetch('/api/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({
+        firstName:    document.getElementById('firstName').value.trim(),
+        lastName:     document.getElementById('lastName').value.trim(),
+        email:        document.getElementById('email').value.trim(),
+        studentNumber:document.getElementById('studentNumber').value.trim(),
+        faculty:      document.getElementById('faculty').value,
+        yearOfStudy:  document.getElementById('yearOfStudy').value,
+        password,
+        isTestUser:   document.getElementById('isTestUser').checked,
+      })
+    });
+    saveSession(data.token, data.user);
+    // Go straight to profile builder
+    window.location.href = '/profile-builder.html';
+  } catch (ex) {
+    err.textContent = ex.message;
+    err.classList.add('show');
+    btn.disabled = false;
+    btn.textContent = 'Create Account & Continue →';
+  }
+}
+</script>
+</body>
+</html>
