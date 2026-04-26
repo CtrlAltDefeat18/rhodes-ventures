@@ -4,110 +4,193 @@
 <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <title>Register — Rhodes Ventures</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <style>
-  :root {
-    --purple-900:#1e0a4a; --purple-800:#3d1a80; --purple-600:#6d40c4;
-    --purple-400:#9b7fe8; --purple-100:#f0ecff; --purple-200:#d9d0ff;
-    --text:#1a1025; --text-soft:#8a7fa0; --rule:#e8e4f0; --white:#fff; --off:#fafafa;
+  :root{
+    --purple-900:#1e0a4a;--purple-800:#3d1a80;--purple-600:#6d40c4;
+    --purple-400:#9b7fe8;--purple-200:#d9d0ff;--purple-100:#f0ecff;
+    --text:#1a1025;--text-mid:#4a4060;--text-soft:#8a7fa0;
+    --rule:#e8e4f0;--white:#fff;--off:#fafafa;
   }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--off); color: var(--text); min-height: 100vh; display: flex; }
-  .split { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
-  .left {
-    background: linear-gradient(160deg, var(--purple-900) 0%, var(--purple-800) 35%, var(--purple-600) 65%, #c4a8f5 85%, var(--white) 100%);
-    display: flex; align-items: center; justify-content: center; padding: 60px;
-    position: relative; overflow: hidden;
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--off);color:var(--text);min-height:100vh;display:flex;}
+  .split{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;width:100%;}
+  .left{
+    background:linear-gradient(160deg,var(--purple-900) 0%,var(--purple-800) 35%,var(--purple-600) 65%,#c4a8f5 85%,var(--white) 100%);
+    display:flex;align-items:flex-start;justify-content:center;padding:60px;
+    position:relative;overflow:hidden;
   }
-  .left-grid { position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px); background-size: 50px 50px; }
-  .left-content { position: relative; z-index: 1; color: white; max-width: 380px; }
-  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 48px; }
-  .brand-mark { width: 38px; height: 38px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 700; }
-  .brand-text strong { display: block; font-size: 13px; font-weight: 600; }
-  .brand-text span { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 0.08em; text-transform: uppercase; }
-  .left-title { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; line-height: 1.1; margin-bottom: 20px; }
-  .left-title em { font-style: italic; }
-  .left-desc { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.75; }
-  .steps { margin-top: 40px; display: flex; flex-direction: column; gap: 14px; }
-  .step-item { display: flex; gap: 14px; align-items: flex-start; }
-  .step-num { width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
-  .step-text strong { display: block; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-  .step-text span { font-size: 12px; color: rgba(255,255,255,0.55); }
-  .right { display: flex; align-items: flex-start; justify-content: center; padding: 60px; overflow-y: auto; }
-  .form-box { width: 100%; max-width: 420px; }
-  .form-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; margin-bottom: 6px; }
-  .form-sub { font-size: 13px; color: var(--text-soft); margin-bottom: 36px; }
-  .form-sub a { color: var(--purple-600); text-decoration: none; font-weight: 600; }
-  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 8px; }
-  .inp { width: 100%; padding: 13px 16px; border: 1px solid var(--rule); border-radius: 10px; background: var(--white); color: var(--text); font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s; margin-bottom: 20px; }
-  .inp:focus { border-color: var(--purple-400); }
-  .sel { width: 100%; padding: 13px 16px; border: 1px solid var(--rule); border-radius: 10px; background: var(--white); color: var(--text); font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; appearance: none; margin-bottom: 20px; }
-  .submit { width: 100%; padding: 14px; background: var(--purple-800); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; transition: background 0.2s; margin-top: 4px; }
-  .submit:hover { background: var(--purple-600); }
-  .submit:disabled { opacity: 0.6; pointer-events: none; }
-  .err-msg { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 20px; display: none; }
-  .err-msg.show { display: block; }
-  .hint { font-size: 11px; color: var(--text-soft); margin-top: -16px; margin-bottom: 20px; }
-  .divider-label { font-size: 11px; color: var(--text-soft); letter-spacing: 0.08em; text-transform: uppercase; margin: 8px 0 20px; display: block; }
-  .test-row { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; padding: 14px 16px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; }
-  .test-row input { width: 16px; height: 16px; }
-  .test-row label { font-size: 12px; color: #92400e; margin: 0; text-transform: none; letter-spacing: 0; font-weight: 500; }
-  @media(max-width:700px){.split{grid-template-columns:1fr;}.left{display:none;}.right{padding:40px 24px;}}
+  .left-grid{position:absolute;inset:0;pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);
+    background-size:50px 50px;}
+  .left-content{position:relative;z-index:1;color:white;max-width:360px;padding-top:20px;}
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:48px;text-decoration:none;color:white;}
+  .brand-mark{width:40px;height:40px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);
+    border-radius:10px;display:flex;align-items:center;justify-content:center;
+    font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;flex-shrink:0;transition:background 0.2s;}
+  .brand:hover .brand-mark{background:rgba(255,255,255,0.25);}
+  .brand-text strong{display:block;font-size:13px;font-weight:600;}
+  .brand-text span{font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:0.08em;text-transform:uppercase;}
+  .left-title{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;line-height:1.1;margin-bottom:16px;}
+  .left-title em{font-style:italic;}
+  .left-desc{font-size:14px;color:rgba(255,255,255,0.65);line-height:1.75;margin-bottom:32px;}
+  .step-list{display:flex;flex-direction:column;gap:16px;}
+  .step-row{display:flex;gap:14px;align-items:flex-start;}
+  .step-n{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.15);
+    border:1px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;}
+  .step-text strong{display:block;font-size:13px;font-weight:600;margin-bottom:2px;}
+  .step-text span{font-size:12px;color:rgba(255,255,255,0.55);}
+
+  .right{display:flex;align-items:flex-start;justify-content:center;padding:48px 60px;overflow-y:auto;}
+  .form-box{width:100%;max-width:440px;}
+
+  .back-link{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--text-soft);
+    text-decoration:none;margin-bottom:28px;transition:color 0.2s;}
+  .back-link:hover{color:var(--purple-600);}
+  .back-link svg{width:16px;height:16px;}
+
+  .server-status{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;
+    border-radius:100px;border:1px solid var(--rule);font-size:11px;font-weight:600;
+    letter-spacing:0.05em;margin-bottom:20px;background:var(--white);}
+  .status-dot{width:7px;height:7px;border-radius:50%;}
+  .dot-checking{background:#f59e0b;animation:blink 1s infinite;}
+  .dot-ok{background:#22c55e;}
+  .dot-fail{background:#dc2626;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+  .form-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;margin-bottom:6px;}
+  .form-sub{font-size:13px;color:var(--text-soft);margin-bottom:28px;}
+  .form-sub a{color:var(--purple-600);text-decoration:none;font-weight:600;}
+  .form-sub a:hover{text-decoration:underline;}
+
+  .err-box{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;
+    padding:13px 16px;border-radius:10px;font-size:13px;margin-bottom:20px;
+    display:none;line-height:1.5;}
+  .err-box.show{display:block;}
+
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .field{margin-bottom:0;}
+
+  label{display:block;font-size:11px;font-weight:700;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--text-soft);margin-bottom:7px;}
+  label .req{color:#dc2626;margin-left:2px;}
+  label .opt{font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-soft);}
+
+  .inp,.sel{width:100%;padding:12px 15px;border:1px solid var(--rule);border-radius:10px;
+    background:var(--white);color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;
+    outline:none;transition:border-color 0.2s;margin-bottom:6px;}
+  .inp:focus,.sel:focus{border-color:var(--purple-400);}
+  .inp.has-error{border-color:#dc2626;background:#fef2f2;}
+  .sel{appearance:none;}
+
+  .field-err{font-size:11px;color:#dc2626;margin-bottom:14px;display:none;}
+  .field-err.show{display:block;}
+  .field-hint{font-size:11px;color:var(--text-soft);margin-bottom:14px;}
+
+  .section-divider{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--text-soft);border-bottom:1px solid var(--rule);padding-bottom:8px;margin:20px 0 16px;}
+
+  .test-row{display:flex;align-items:center;gap:10px;padding:12px 14px;
+    background:#fffbeb;border:1px solid #fde68a;border-radius:10px;margin-bottom:16px;}
+  .test-row input[type="checkbox"]{width:15px;height:15px;accent-color:var(--purple-600);}
+  .test-row label{font-size:12px;color:#92400e;margin:0;text-transform:none;letter-spacing:0;font-weight:500;}
+
+  .submit{width:100%;padding:14px;background:var(--purple-800);color:white;
+    border:none;border-radius:10px;font-size:14px;font-weight:700;
+    letter-spacing:0.04em;cursor:pointer;transition:background 0.2s;margin-top:8px;}
+  .submit:hover{background:var(--purple-600);}
+  .submit:disabled{opacity:0.55;pointer-events:none;}
+  .terms{font-size:11px;color:var(--text-soft);text-align:center;margin-top:12px;line-height:1.6;}
+
+  .divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--text-soft);font-size:12px;}
+  .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--rule);}
+  .alt-link{text-align:center;font-size:13px;color:var(--text-soft);}
+  .alt-link a{color:var(--purple-600);font-weight:600;text-decoration:none;}
+  .alt-link a:hover{text-decoration:underline;}
+
+  @media(max-width:700px){
+    .split{grid-template-columns:1fr;}
+    .left{display:none;}
+    .right{padding:32px 20px;align-items:flex-start;}
+    .row2{grid-template-columns:1fr;}
+  }
 </style>
 </head>
 <body>
 <div class="split">
+
+  <!-- LEFT -->
   <div class="left">
     <div class="left-grid"></div>
     <div class="left-content">
-      <div class="brand">
+      <a href="/index.html" class="brand">
         <div class="brand-mark">R</div>
         <div class="brand-text">
           <strong>Rhodes University</strong>
           <span>Centre for Entrepreneurship</span>
         </div>
-      </div>
-      <h2 class="left-title">Get on<br/>the <em>map.</em></h2>
-      <p class="left-desc">Register your venture to be listed in the Rhodes entrepreneurship directory, access support, and be discovered by the ecosystem.</p>
-      <div class="steps">
-        <div class="step-item"><div class="step-num">1</div><div class="step-text"><strong>Create your account</strong><span>Uses your Rhodes email address</span></div></div>
-        <div class="step-item"><div class="step-num">2</div><div class="step-text"><strong>Build your venture profile</strong><span>Complete at your own pace — saves automatically</span></div></div>
-        <div class="step-item"><div class="step-num">3</div><div class="step-text"><strong>Go live in the directory</strong><span>Visible to investors, mentors, and collaborators</span></div></div>
+      </a>
+      <h2 class="left-title">Get on<br/><em>the map.</em></h2>
+      <p class="left-desc">Register your venture to appear in the Rhodes entrepreneurship directory and connect with investors, mentors, and collaborators.</p>
+      <div class="step-list">
+        <div class="step-row"><div class="step-n">1</div><div class="step-text"><strong>Create your account</strong><span>Uses your Rhodes University email</span></div></div>
+        <div class="step-row"><div class="step-n">2</div><div class="step-text"><strong>Build your venture profile</strong><span>Complete at your own pace — saves automatically</span></div></div>
+        <div class="step-row"><div class="step-n">3</div><div class="step-text"><strong>Go live in the directory</strong><span>Visible to investors, mentors, and partners</span></div></div>
       </div>
     </div>
   </div>
+
+  <!-- RIGHT -->
   <div class="right">
     <div class="form-box">
-      <h1 class="form-title">Create account</h1>
+
+      <a href="/index.html" class="back-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back to homepage
+      </a>
+
+      <div class="server-status" id="server-status">
+        <div class="status-dot dot-checking" id="status-dot"></div>
+        <span id="status-text">Checking connection…</span>
+      </div>
+
+      <h1 class="form-title">Create account.</h1>
       <p class="form-sub">Already registered? <a href="/login.html">Sign in →</a></p>
 
-      <div class="err-msg" id="err"></div>
+      <div class="err-box" id="err"></div>
 
-      <form id="reg-form" onsubmit="handleRegister(event)">
+      <form id="reg-form" onsubmit="handleRegister(event)" novalidate>
+
+        <div class="section-divider">Your Details</div>
         <div class="row2">
-          <div>
-            <label for="firstName">First Name</label>
-            <input class="inp" id="firstName" type="text" placeholder="Thabo" required />
+          <div class="field">
+            <label for="firstName">First Name <span class="req">*</span></label>
+            <input class="inp" id="firstName" type="text" placeholder="Thabo" autocomplete="given-name" />
+            <div class="field-err" id="err-firstName"></div>
           </div>
-          <div>
-            <label for="lastName">Last Name</label>
-            <input class="inp" id="lastName" type="text" placeholder="Molefe" required />
+          <div class="field">
+            <label for="lastName">Last Name <span class="req">*</span></label>
+            <input class="inp" id="lastName" type="text" placeholder="Molefe" autocomplete="family-name" />
+            <div class="field-err" id="err-lastName"></div>
           </div>
         </div>
 
-        <label for="email">Rhodes Email Address</label>
-        <input class="inp" id="email" type="email" placeholder="g23m1234@campus.ru.ac.za" autocomplete="email" required />
+        <label for="email">Rhodes University Email <span class="req">*</span></label>
+        <input class="inp" id="email" type="email" placeholder="g23m1234@campus.ru.ac.za" autocomplete="email" />
+        <div class="field-err" id="err-email"></div>
+        <p class="field-hint">Must be a @ru.ac.za or @campus.ru.ac.za address.</p>
 
-        <label for="studentNumber">Student Number</label>
+        <label for="studentNumber">Student Number <span class="opt">(optional)</span></label>
         <input class="inp" id="studentNumber" type="text" placeholder="g23m1234" />
 
         <div class="row2">
-          <div>
+          <div class="field">
             <label for="faculty">Faculty</label>
             <select class="sel" id="faculty">
               <option value="">Select faculty</option>
-              <option>Commerce, Law and Management</option>
+              <option>Commerce, Law &amp; Management</option>
               <option>Education</option>
               <option>Humanities</option>
               <option>Science</option>
@@ -115,87 +198,154 @@
               <option>Law</option>
             </select>
           </div>
-          <div>
+          <div class="field">
             <label for="yearOfStudy">Year of Study</label>
             <select class="sel" id="yearOfStudy">
               <option value="">Select year</option>
-              <option>1st Year</option>
-              <option>2nd Year</option>
-              <option>3rd Year</option>
-              <option>Honours</option>
-              <option>Masters</option>
-              <option>PhD</option>
+              <option>1st Year</option><option>2nd Year</option><option>3rd Year</option>
+              <option>Honours</option><option>Masters</option><option>PhD</option>
               <option>Recent Alumni</option>
             </select>
           </div>
         </div>
 
-        <label for="password">Password</label>
-        <input class="inp" id="password" type="password" placeholder="••••••••" autocomplete="new-password" required />
-        <p class="hint">Minimum 8 characters.</p>
+        <div class="section-divider">Set Password</div>
+        <label for="password">Password <span class="req">*</span></label>
+        <input class="inp" id="password" type="password" placeholder="Minimum 8 characters" autocomplete="new-password" />
+        <div class="field-err" id="err-password"></div>
 
-        <label for="password2">Confirm Password</label>
-        <input class="inp" id="password2" type="password" placeholder="••••••••" autocomplete="new-password" required />
+        <label for="password2">Confirm Password <span class="req">*</span></label>
+        <input class="inp" id="password2" type="password" placeholder="Repeat your password" autocomplete="new-password" />
+        <div class="field-err" id="err-password2"></div>
 
-        <!-- Test user flag — only show in non-production or when admin is registering -->
+        <div class="section-divider">Your Venture</div>
+        <label for="ventureName">Venture or Idea Name <span class="opt">(optional — you can add this later)</span></label>
+        <input class="inp" id="ventureName" type="text" placeholder="e.g. NextGen Artisan Hub" />
+
+        <!-- Test user checkbox — only shown in dev -->
         <div class="test-row" id="test-row" style="display:none">
           <input type="checkbox" id="isTestUser" />
-          <label for="isTestUser">Mark as test user (data will be clearable via admin panel)</label>
+          <label for="isTestUser">Mark as test user — this account and its data can be cleared from the admin panel</label>
         </div>
 
-        <button class="submit" id="submit-btn" type="submit">Create Account & Continue →</button>
+        <button class="submit" id="submit-btn" type="submit">Create Account &amp; Continue →</button>
+        <p class="terms">By registering you confirm you are a current Rhodes University student or recent alumnus with a genuine venture or business idea.</p>
       </form>
+
+      <div class="divider">or</div>
+      <p class="alt-link">Already have an account? <a href="/login.html">Sign in here</a></p>
     </div>
   </div>
+
 </div>
 
 <script src="/auth.js"></script>
 <script>
 requireGuest();
 
-// Show test-user checkbox in development
+// Show test checkbox in dev
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
   document.getElementById('test-row').style.display = 'flex';
 }
 
+// ─── SERVER STATUS ────────────────────────────────────────────────
+(async () => {
+  const dot  = document.getElementById('status-dot');
+  const text = document.getElementById('status-text');
+  const pill = document.getElementById('server-status');
+  const err  = document.getElementById('err');
+  const health = await checkServerHealth();
+
+  if (health.status === 'ok' && health.db === 'connected') {
+    dot.className = 'status-dot dot-ok';
+    text.textContent = 'Server connected — ready to register';
+    pill.style.borderColor = '#bbf7d0';
+    pill.style.background  = '#f0fdf4';
+    pill.style.color = '#166534';
+  } else if (health.status === 'ok' && health.db === 'disconnected') {
+    dot.className = 'status-dot dot-fail';
+    text.textContent = 'Database not connected';
+    pill.style.borderColor = '#fecaca';
+    pill.style.background  = '#fef2f2';
+    pill.style.color = '#dc2626';
+    err.innerHTML = '<strong>Database not connected.</strong> Registration will not work until MongoDB is connected. Go to Replit → Secrets → set <code>MONGO_URI</code>, then restart the Repl.';
+    err.classList.add('show');
+  } else {
+    dot.className = 'status-dot dot-fail';
+    text.textContent = 'Server unreachable';
+  }
+})();
+
+// ─── VALIDATION HELPERS ───────────────────────────────────────────
+function clearErrors() {
+  ['firstName','lastName','email','password','password2'].forEach(f => {
+    const el = document.getElementById(f);
+    const er = document.getElementById(`err-${f}`);
+    if (el) el.classList.remove('has-error');
+    if (er) er.classList.remove('show');
+  });
+  document.getElementById('err').classList.remove('show');
+}
+
+function fieldErr(id, msg) {
+  const el = document.getElementById(id);
+  const er = document.getElementById(`err-${id}`);
+  if (el) el.classList.add('has-error');
+  if (er) { er.textContent = msg; er.classList.add('show'); }
+  return true;
+}
+
+// ─── SUBMIT ───────────────────────────────────────────────────────
 async function handleRegister(e) {
   e.preventDefault();
+  clearErrors();
+
+  const firstName    = document.getElementById('firstName').value.trim();
+  const lastName     = document.getElementById('lastName').value.trim();
+  const email        = document.getElementById('email').value.trim();
+  const studentNumber= document.getElementById('studentNumber').value.trim();
+  const faculty      = document.getElementById('faculty').value;
+  const yearOfStudy  = document.getElementById('yearOfStudy').value;
+  const password     = document.getElementById('password').value;
+  const password2    = document.getElementById('password2').value;
+  const isTestUser   = document.getElementById('isTestUser').checked;
+
+  let hasError = false;
+  if (!firstName) hasError = fieldErr('firstName', 'First name is required.');
+  if (!lastName)  hasError = fieldErr('lastName',  'Last name is required.');
+
+  if (!email) {
+    hasError = fieldErr('email', 'Email address is required.');
+  } else if (!isRhodesEmail(email)) {
+    hasError = fieldErr('email', 'Please use your Rhodes University email address (@ru.ac.za or @campus.ru.ac.za).');
+  }
+
+  if (!password) {
+    hasError = fieldErr('password', 'Please choose a password.');
+  } else if (password.length < 8) {
+    hasError = fieldErr('password', 'Password must be at least 8 characters long.');
+  }
+
+  if (!password2) {
+    hasError = fieldErr('password2', 'Please confirm your password.');
+  } else if (password !== password2) {
+    hasError = fieldErr('password2', 'Passwords do not match — please re-enter.');
+  }
+
+  if (hasError) return;
+
   const btn = document.getElementById('submit-btn');
   const err = document.getElementById('err');
-  err.classList.remove('show');
-
-  const password  = document.getElementById('password').value;
-  const password2 = document.getElementById('password2').value;
-  if (password !== password2) {
-    err.textContent = 'Passwords do not match.';
-    err.classList.add('show');
-    return;
-  }
-  if (password.length < 8) {
-    err.textContent = 'Password must be at least 8 characters.';
-    err.classList.add('show');
-    return;
-  }
-
   btn.disabled = true;
-  btn.textContent = 'Creating account…';
+  btn.textContent = 'Creating your account…';
 
   try {
     const data = await apiFetch('/api/auth/register', {
       method: 'POST',
-      body: JSON.stringify({
-        firstName:    document.getElementById('firstName').value.trim(),
-        lastName:     document.getElementById('lastName').value.trim(),
-        email:        document.getElementById('email').value.trim(),
-        studentNumber:document.getElementById('studentNumber').value.trim(),
-        faculty:      document.getElementById('faculty').value,
-        yearOfStudy:  document.getElementById('yearOfStudy').value,
-        password,
-        isTestUser:   document.getElementById('isTestUser').checked,
-      })
+      body: JSON.stringify({ firstName, lastName, email, studentNumber, faculty, yearOfStudy, password, isTestUser }),
     });
     saveSession(data.token, data.user);
-    // Go straight to profile builder
+    // Redirect to profile builder — account is created
     window.location.href = '/profile-builder.html';
   } catch (ex) {
     err.textContent = ex.message;
@@ -207,3 +357,4 @@ async function handleRegister(e) {
 </script>
 </body>
 </html>
+
