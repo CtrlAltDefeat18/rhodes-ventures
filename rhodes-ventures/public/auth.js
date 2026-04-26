@@ -1,10 +1,8 @@
-// ─── AUTH HELPERS (shared across all pages) ──────────────────────
-
-const API = '';  // Same origin — no need for absolute URL
+// ─── SHARED AUTH HELPERS ─────────────────────────────────────────
 
 function getToken()   { return localStorage.getItem('rv_token'); }
-function getUser()    { const u = localStorage.getItem('rv_user'); return u ? JSON.parse(u) : null; }
-function isLoggedIn() { return !!getToken(); }
+function getUser()    { try { return JSON.parse(localStorage.getItem('rv_user') || 'null'); } catch(e) { return null; } }
+function isLoggedIn() { return !!getToken() && !!getUser(); }
 function isAdmin()    { const u = getUser(); return u && u.role === 'admin'; }
 
 function saveSession(token, user) {
@@ -22,29 +20,56 @@ function logout() {
   window.location.href = '/login.html';
 }
 
-// ─── API call helper ─────────────────────────────────────────────
+// ─── RHODES EMAIL VALIDATION ─────────────────────────────────────
+function isRhodesEmail(email) {
+  if (!email) return false;
+  const lower = email.toLowerCase().trim();
+  // Accept @ru.ac.za, @campus.ru.ac.za, @rhodesuniversity.ac.za
+  return /^[^\s@]+@(campus\.ru\.ac\.za|ru\.ac\.za|rhodesuniversity\.ac\.za)$/.test(lower);
+}
+
+// ─── API FETCH ───────────────────────────────────────────────────
 async function apiFetch(path, options = {}) {
   const token = getToken();
   const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
-  const res = await fetch(API + path, { ...options, headers });
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(data.message || 'Something went wrong.');
+  let res;
+  try {
+    res = await fetch(path, { ...options, headers });
+  } catch (networkErr) {
+    throw new Error('Cannot reach the server. Check your internet connection or try again shortly.');
   }
+
+  // Handle non-JSON responses (e.g. server crashed, returned HTML)
+  const contentType = res.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    throw new Error(`Server error (${res.status}). The database may not be connected yet — check Replit Secrets.`);
+  }
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || `Error ${res.status}`);
   return data;
 }
 
-// ─── Guard: redirect to login if not authenticated ───────────────
-function requireAuth() {
-  if (!isLoggedIn()) {
-    window.location.href = '/login.html?next=' + encodeURIComponent(window.location.pathname);
+// ─── SERVER HEALTH CHECK ─────────────────────────────────────────
+async function checkServerHealth() {
+  try {
+    const data = await apiFetch('/api/health');
+    return data;
+  } catch(e) {
+    return { status: 'unreachable', db: 'disconnected' };
   }
 }
 
-// ─── Guard: redirect to dashboard if already logged in ───────────
+// ─── ROUTE GUARDS ────────────────────────────────────────────────
+function requireAuth() {
+  if (!isLoggedIn()) {
+    const next = encodeURIComponent(window.location.pathname + window.location.search);
+    window.location.href = '/login.html?next=' + next;
+  }
+}
+
 function requireGuest() {
   if (isLoggedIn()) {
     window.location.href = '/dashboard.html';
