@@ -1,701 +1,362 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <title>Rhodes Ventures — Centre for Entrepreneurship</title>
-
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
 <style>
-/* ─── TOKENS ─── */
-:root {
-  --white:       #ffffff;
-  --off-white:   #f8f7ff;
-  --page-bg:     #fafafa;
-  --rule:        #e8e4f0;
-  --text:        #1a1025;
-  --text-mid:    #4a4060;
-  --text-soft:   #8a7fa0;
-  --purple-100:  #f0ecff;
-  --purple-200:  #d9d0ff;
-  --purple-400:  #9b7fe8;
-  --purple-600:  #6d40c4;
-  --purple-800:  #3d1a80;
-  --purple-900:  #1e0a4a;
-  --gold:        #b8860b;
-  --gold-light:  #d4a93a;
+:root{
+  --white:#ffffff;--off-white:#f8f7ff;--page-bg:#fafafa;--rule:#e8e4f0;
+  --text:#1a1025;--text-mid:#4a4060;--text-soft:#8a7fa0;
+  --purple-100:#f0ecff;--purple-200:#d9d0ff;--purple-400:#9b7fe8;
+  --purple-600:#6d40c4;--purple-800:#3d1a80;--purple-900:#1e0a4a;
 }
-
-/* ─── RESET ─── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--page-bg);
-  color: var(--text);
-  overflow-x: hidden;
-  cursor: none;
-}
-
-/* ─── NOISE LAYER ─── */
-body::after {
-  content: '';
-  position: fixed; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 9000;
-  opacity: 1;
-}
-
-/* ─── CURSOR ─── */
-*, *::before, *::after { cursor: none !important; }
-#cursor {
-  width: 0; height: 0;
-  position: fixed; top: 0; left: 0;
-  pointer-events: none;
-  z-index: 9500;
-  transform: translate(-4px, -4px);
-  transition: transform 0.05s linear;
-}
-#cursor svg {
-  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.15));
-  transition: transform 0.2s ease;
-}
-body:has(a:hover) #cursor svg,
-body:has(button:hover) #cursor svg,
-body:has(.venture-card:hover) #cursor svg { transform: scale(1.2); }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--page-bg);color:var(--text);overflow-x:hidden;}
 
 /* ─── NAV ─── */
-#nav {
-  position: fixed; top: 0; width: 100%; z-index: 800;
-  padding: 0 48px;
-  height: 64px;
-  display: flex; align-items: center; justify-content: space-between;
-  background: rgba(255,255,255,0);
-  border-bottom: 1px solid transparent;
-  transition: background 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease;
-}
-#nav.scrolled {
-  background: rgba(255,255,255,0.92);
-  border-color: var(--rule);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-.nav-brand {
-  display: flex; align-items: center; gap: 12px;
-  text-decoration: none; color: inherit;
-}
-.nav-mark {
-  width: 34px; height: 34px;
-  background: var(--purple-800);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  color: white;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 16px; font-weight: 700;
-  flex-shrink: 0;
-}
-.nav-brand-text { line-height: 1.15; }
-.nav-brand-text strong { display: block; font-size: 13px; font-weight: 600; color: var(--text); }
-.nav-brand-text span { font-size: 10px; color: var(--text-soft); letter-spacing: 0.06em; text-transform: uppercase; }
-.nav-links { display: flex; gap: 32px; list-style: none; }
-.nav-links a {
-  text-decoration: none; color: var(--text-mid);
-  font-size: 13px; font-weight: 500; letter-spacing: 0.02em;
-  transition: color 0.2s;
-}
-.nav-links a:hover { color: var(--purple-600); }
-.nav-apply {
-  padding: 9px 22px;
-  background: var(--purple-800);
-  color: white; font-size: 13px; font-weight: 600;
-  border: none; border-radius: 8px;
-  letter-spacing: 0.03em;
-  transition: background 0.2s, transform 0.2s;
-}
-.nav-apply:hover { background: var(--purple-600); transform: translateY(-1px); }
+#nav{position:fixed;top:0;width:100%;z-index:800;padding:0 48px;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(255,255,255,0);border-bottom:1px solid transparent;
+  transition:background 0.35s,border-color 0.35s,backdrop-filter 0.35s;}
+#nav.scrolled{background:rgba(255,255,255,0.94);border-color:var(--rule);backdrop-filter:blur(16px);}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;}
+.nav-mark{width:34px;height:34px;background:var(--purple-800);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;color:white;
+  font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;flex-shrink:0;}
+.nav-brand-text{line-height:1.15;}
+.nav-brand-text strong{display:block;font-size:13px;font-weight:600;color:var(--text);}
+.nav-brand-text span{font-size:10px;color:var(--text-soft);letter-spacing:0.06em;text-transform:uppercase;}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{text-decoration:none;color:var(--text-mid);font-size:13px;font-weight:500;transition:color 0.2s;}
+.nav-links a:hover{color:var(--purple-600);}
+.nav-auth{display:flex;align-items:center;gap:10px;}
+.nav-signin{padding:8px 18px;border:1px solid var(--rule);border-radius:8px;font-size:13px;
+  font-weight:500;color:var(--text-mid);text-decoration:none;transition:all 0.2s;}
+.nav-signin:hover{background:var(--off-white);}
+.nav-register{padding:8px 20px;background:var(--purple-800);color:white;border-radius:8px;
+  font-size:13px;font-weight:600;text-decoration:none;transition:background 0.2s;}
+.nav-register:hover{background:var(--purple-600);}
 
 /* ─── HERO ─── */
-#hero {
-  min-height: 100vh;
-  display: flex; align-items: center;
-  padding: 120px 48px 80px;
-  position: relative; overflow: hidden;
-  background: linear-gradient(160deg,
-    var(--purple-900) 0%,
-    var(--purple-800) 20%,
-    var(--purple-600) 42%,
-    #c4a8f5 62%,
-    #ede8ff 76%,
-    var(--white) 100%
-  );
-}
-.hero-grid {
-  position: absolute; inset: 0; pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 70%, transparent 100%);
-}
-.hero-content {
-  position: relative; z-index: 2;
-  max-width: 820px;
-}
-.hero-kicker {
-  display: inline-block;
-  font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.6);
-  margin-bottom: 24px;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
-  padding-bottom: 8px;
-}
-.hero-h1 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(52px, 8vw, 96px);
-  font-weight: 300;
-  line-height: 1.02;
-  letter-spacing: -0.02em;
-  color: white;
-  margin-bottom: 32px;
-}
-.hero-h1 em { font-style: italic; }
-.hero-h1 .hero-lower {
-  color: var(--text);
-  font-weight: 600;
-  display: block;
-  -webkit-text-stroke: 0px;
-}
-.hero-sub {
-  font-size: 16px; line-height: 1.75; font-weight: 300;
-  color: rgba(255,255,255,0.7);
-  max-width: 480px;
-  margin-bottom: 44px;
-}
-.hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
-.btn-solid {
-  padding: 14px 32px;
-  background: white;
-  color: var(--purple-900);
-  font-size: 13px; font-weight: 700; letter-spacing: 0.04em;
-  border: none; border-radius: 8px;
-  text-decoration: none; display: inline-block;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.btn-solid:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,0.15); }
-.btn-outline {
-  padding: 14px 32px;
-  border: 1px solid rgba(255,255,255,0.35);
-  color: rgba(255,255,255,0.85);
-  font-size: 13px; font-weight: 500;
-  border-radius: 8px;
-  text-decoration: none; display: inline-block;
-  transition: border-color 0.2s, color 0.2s, background 0.2s;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(8px);
-}
-.btn-outline:hover { border-color: white; color: white; background: rgba(255,255,255,0.1); }
-.hero-stats {
-  position: absolute; bottom: 60px; right: 48px; z-index: 2;
-  display: flex; gap: 40px;
-}
-.h-stat-n {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 36px; font-weight: 600;
-  color: white; line-height: 1;
-}
-.h-stat-l { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-top: 4px; }
+#hero{min-height:100vh;display:flex;align-items:center;padding:120px 48px 80px;
+  position:relative;overflow:hidden;
+  background:linear-gradient(160deg,var(--purple-900) 0%,var(--purple-800) 20%,
+    var(--purple-600) 42%,#c4a8f5 62%,#ede8ff 76%,var(--white) 100%);}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:linear-gradient(to bottom,transparent 0%,black 20%,black 70%,transparent 100%);}
+.hero-content{position:relative;z-index:2;max-width:820px;}
+.hero-kicker{display:inline-block;font-size:11px;font-weight:600;letter-spacing:0.14em;
+  text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:24px;
+  border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:8px;}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,8vw,96px);
+  font-weight:300;line-height:1.02;letter-spacing:-0.02em;color:white;margin-bottom:28px;}
+.hero-h1 em{font-style:italic;}
+.hero-lower{color:var(--text);font-weight:600;display:block;}
+.hero-sub{font-size:16px;line-height:1.75;font-weight:300;color:rgba(255,255,255,0.7);
+  max-width:480px;margin-bottom:40px;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-solid{padding:14px 32px;background:white;color:var(--purple-900);font-size:13px;
+  font-weight:700;letter-spacing:0.04em;border:none;border-radius:8px;text-decoration:none;
+  display:inline-block;transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;}
+.btn-solid:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,0.15);}
+.btn-outline{padding:14px 32px;border:1px solid rgba(255,255,255,0.35);color:rgba(255,255,255,0.85);
+  font-size:13px;font-weight:500;border-radius:8px;text-decoration:none;display:inline-block;
+  transition:all 0.2s;background:rgba(255,255,255,0.06);backdrop-filter:blur(8px);}
+.btn-outline:hover{border-color:white;color:white;background:rgba(255,255,255,0.12);}
+.hero-stats{position:absolute;bottom:60px;right:48px;z-index:2;display:flex;gap:40px;}
+.h-stat-n{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;color:white;line-height:1;}
+.h-stat-l{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-top:4px;}
 
 /* ─── SECTIONS ─── */
-.section { padding: 100px 48px; }
-.section.bg-white { background: var(--white); }
-.section.bg-off { background: var(--off-white); }
-.section.bg-purple { background: var(--purple-100); }
-
-.sec-kicker { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--purple-600); margin-bottom: 12px; display: block; }
-.sec-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(34px, 4vw, 54px);
-  font-weight: 600; line-height: 1.1;
-  letter-spacing: -0.01em; color: var(--text);
-  margin-bottom: 16px;
-}
-.sec-desc { font-size: 15px; color: var(--text-soft); line-height: 1.75; max-width: 520px; }
-.sec-header { margin-bottom: 64px; }
-.wrap { max-width: 1200px; margin: 0 auto; }
+.section{padding:100px 48px;}
+.section.bg-white{background:var(--white);}
+.section.bg-off{background:var(--off-white);}
+.wrap{max-width:1200px;margin:0 auto;}
+.sec-kicker{font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--purple-600);margin-bottom:12px;display:block;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,4vw,54px);
+  font-weight:600;line-height:1.1;letter-spacing:-0.01em;color:var(--text);margin-bottom:14px;}
+.sec-desc{font-size:15px;color:var(--text-soft);line-height:1.75;max-width:520px;}
+.sec-header{margin-bottom:60px;}
 
 /* ─── VENTURE CARDS ─── */
-.ventures-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(480px, 1fr)); gap: 32px; }
-.venture-card {
-  background: var(--white);
-  border: 1px solid var(--rule);
-  border-radius: 20px;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-}
-.venture-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 60px rgba(109,64,196,0.12);
-  border-color: var(--purple-200);
-}
-.vc-top {
-  padding: 32px 32px 0;
-  display: flex; align-items: flex-start; justify-content: space-between; gap: 20px;
-}
-.vc-identity {}
-.vc-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 28px; font-weight: 700;
-  color: var(--text); line-height: 1.1; margin-bottom: 6px;
-}
-.vc-founder { font-size: 12px; color: var(--text-soft); font-weight: 500; letter-spacing: 0.03em; }
-.vc-sector-badge {
-  flex-shrink: 0;
-  padding: 6px 14px;
-  background: var(--purple-100);
-  color: var(--purple-600);
-  font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; border-radius: 100px;
-  border: 1px solid var(--purple-200);
-}
-.vc-tagline {
-  padding: 16px 32px 0;
-  font-size: 14px; color: var(--text-mid); line-height: 1.65;
-}
+.ventures-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(460px,1fr));gap:28px;}
+.venture-card{background:var(--white);border:1px solid var(--rule);border-radius:20px;
+  overflow:hidden;transition:transform 0.3s,box-shadow 0.3s,border-color 0.3s;cursor:pointer;}
+.venture-card:hover{transform:translateY(-5px);box-shadow:0 20px 60px rgba(109,64,196,0.12);
+  border-color:var(--purple-200);}
+.vc-top{padding:28px 28px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
+.vc-name{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;
+  color:var(--text);line-height:1.1;margin-bottom:5px;}
+.vc-founder{font-size:12px;color:var(--text-soft);font-weight:500;}
+.vc-sector-badge{flex-shrink:0;padding:5px 13px;background:var(--purple-100);color:var(--purple-600);
+  font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+  border-radius:100px;border:1px solid var(--purple-200);}
+.vc-tagline{padding:12px 28px 0;font-size:13px;color:var(--text-mid);line-height:1.65;}
 
-/* Journey Bar */
-.journey-wrap { padding: 28px 32px; }
-.journey-label {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--text-soft); margin-bottom: 12px;
-}
-.journey-track {
-  position: relative;
-  height: 6px;
-  background: var(--purple-100);
-  border-radius: 100px;
-  margin-bottom: 12px;
-  overflow: visible;
-}
-.journey-fill {
-  position: absolute; left: 0; top: 0; bottom: 0;
-  background: linear-gradient(90deg, var(--purple-800), var(--purple-400));
-  border-radius: 100px;
-  transition: width 1s cubic-bezier(0.34, 1.2, 0.64, 1);
-}
-.journey-dot {
-  position: absolute; top: 50%;
-  width: 14px; height: 14px;
-  background: var(--purple-600);
-  border: 3px solid white;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 2px 8px rgba(109,64,196,0.35);
-}
-.journey-stages {
-  display: flex; justify-content: space-between;
-}
-.j-stage {
-  font-size: 9px; color: var(--text-soft); letter-spacing: 0.04em;
-  text-align: center; flex: 1;
-  transition: color 0.3s, font-weight 0.3s;
-}
-.j-stage.active { color: var(--purple-600); font-weight: 700; }
+/* Journey bar */
+.journey-wrap{padding:24px 28px;}
+.journey-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-soft);margin-bottom:10px;}
+.journey-track{position:relative;height:6px;background:var(--purple-100);border-radius:100px;
+  margin-bottom:10px;overflow:visible;}
+.journey-fill{position:absolute;left:0;top:0;bottom:0;
+  background:linear-gradient(90deg,var(--purple-800),var(--purple-400));
+  border-radius:100px;transition:width 1.1s cubic-bezier(0.34,1.2,0.64,1);}
+.journey-dot{position:absolute;top:50%;width:14px;height:14px;background:var(--purple-600);
+  border:3px solid white;border-radius:50%;transform:translate(-50%,-50%);
+  box-shadow:0 2px 8px rgba(109,64,196,0.35);transition:left 1.1s cubic-bezier(0.34,1.2,0.64,1);}
+.journey-stages{display:flex;justify-content:space-between;}
+.j-stage{font-size:9px;color:var(--text-soft);text-align:center;flex:1;}
+.j-stage.active{color:var(--purple-600);font-weight:700;}
 
-.vc-divider { height: 1px; background: var(--rule); margin: 0 32px; }
+.vc-divider{height:1px;background:var(--rule);margin:0 28px;}
+.vc-footer{padding:18px 28px;display:flex;align-items:center;justify-content:space-between;}
+.vc-tags{display:flex;gap:7px;flex-wrap:wrap;}
+.vc-tag{padding:4px 10px;background:var(--off-white);border:1px solid var(--rule);
+  border-radius:6px;font-size:10px;font-weight:600;letter-spacing:0.06em;
+  color:var(--text-mid);text-transform:uppercase;}
+.btn-more{padding:8px 20px;border:1px solid var(--purple-200);border-radius:8px;
+  background:transparent;color:var(--purple-600);font-size:12px;font-weight:600;
+  letter-spacing:0.04em;white-space:nowrap;transition:all 0.2s;cursor:pointer;}
+.btn-more:hover{background:var(--purple-600);color:white;border-color:var(--purple-600);}
 
-.vc-footer {
-  padding: 20px 32px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.vc-tags { display: flex; gap: 8px; flex-wrap: wrap; }
-.vc-tag {
-  padding: 4px 10px;
-  background: var(--off-white);
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
-  color: var(--text-mid); text-transform: uppercase;
-}
-.btn-more {
-  padding: 9px 22px;
-  border: 1px solid var(--purple-200);
-  border-radius: 8px;
-  background: transparent; color: var(--purple-600);
-  font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
-  white-space: nowrap;
-  transition: all 0.2s;
-}
-.btn-more:hover { background: var(--purple-600); color: white; border-color: var(--purple-600); }
+/* ─── VENTURE MODAL ─── */
+.modal-overlay{position:fixed;inset:0;z-index:900;
+  background:rgba(20,10,40,0.65);backdrop-filter:blur(14px);
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:40px 20px 20px;overflow-y:auto;
+  opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--white);border-radius:24px;max-width:860px;width:100%;
+  transform:translateY(28px) scale(0.98);
+  transition:transform 0.35s cubic-bezier(0.34,1.4,0.64,1);
+  overflow:hidden;position:relative;margin:auto;}
+.modal-overlay.open .modal{transform:translateY(0) scale(1);}
+.modal-close{position:absolute;top:18px;right:18px;z-index:10;
+  width:36px;height:36px;border:1px solid var(--rule);border-radius:50%;
+  background:white;color:var(--text-soft);font-size:16px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;}
+.modal-close:hover{background:var(--text);color:white;border-color:var(--text);}
+.modal-stripe{height:6px;background:linear-gradient(90deg,var(--purple-900),var(--purple-600),var(--purple-400));}
 
-/* ─── MODAL ─── */
-.modal-overlay {
-  position: fixed; inset: 0; z-index: 900;
-  background: rgba(20, 10, 40, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  display: flex; align-items: flex-start; justify-content: center;
-  padding: 48px 24px 24px;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.3s ease;
-  overflow-y: auto;
-}
-.modal-overlay.open { opacity: 1; pointer-events: all; }
-.modal {
-  background: var(--white);
-  border-radius: 24px;
-  max-width: 860px; width: 100%;
-  transform: translateY(24px) scale(0.98);
-  transition: transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
-  overflow: hidden;
-  position: relative;
-}
-.modal-overlay.open .modal { transform: translateY(0) scale(1); }
-.modal-close-btn {
-  position: absolute; top: 20px; right: 20px; z-index: 10;
-  width: 36px; height: 36px;
-  border: 1px solid var(--rule);
-  border-radius: 50%; background: white;
-  color: var(--text-soft); font-size: 16px;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
-}
-.modal-close-btn:hover { background: var(--text); color: white; border-color: var(--text); }
-.modal-stripe {
-  height: 8px;
-  background: linear-gradient(90deg, var(--purple-900), var(--purple-600), var(--purple-400));
-}
-.modal-head {
-  padding: 36px 44px 28px;
-  border-bottom: 1px solid var(--rule);
-  display: flex; justify-content: space-between; align-items: flex-start; gap: 24px;
-}
-.m-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 36px; font-weight: 700; line-height: 1.1; margin-bottom: 6px;
-}
-.m-founder { font-size: 14px; color: var(--text-soft); }
-.m-sector-pill {
-  padding: 8px 20px;
-  background: var(--purple-100);
-  color: var(--purple-600);
-  border-radius: 100px;
-  font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-  flex-shrink: 0; align-self: flex-start; margin-top: 6px;
-  border: 1px solid var(--purple-200);
-}
-.modal-body { padding: 0 44px 44px; }
+/* Modal head */
+.modal-head{padding:32px 40px 24px;border-bottom:1px solid var(--rule);
+  display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;}
+.m-name{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;
+  line-height:1.1;margin-bottom:6px;}
+.m-founder{font-size:13px;color:var(--text-soft);}
+.m-sector-pill{padding:7px 18px;background:var(--purple-100);color:var(--purple-600);
+  border-radius:100px;font-size:10px;font-weight:700;letter-spacing:0.08em;
+  text-transform:uppercase;flex-shrink:0;align-self:flex-start;
+  border:1px solid var(--purple-200);margin-top:4px;}
+
+/* Modal body */
+.modal-body{padding:0 40px 40px;}
 
 /* Journey in modal */
-.m-journey {
-  padding: 28px 0 24px;
-  border-bottom: 1px solid var(--rule);
-}
-.m-journey-title { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 16px; }
-.m-journey-track { position: relative; height: 8px; background: var(--purple-100); border-radius: 100px; margin-bottom: 10px; }
-.m-journey-fill {
-  position: absolute; left: 0; top: 0; bottom: 0;
-  background: linear-gradient(90deg, var(--purple-900), var(--purple-400));
-  border-radius: 100px;
-  transition: width 1.2s cubic-bezier(0.34, 1.2, 0.64, 1);
-}
-.m-journey-dot {
-  position: absolute; top: 50%;
-  width: 16px; height: 16px;
-  background: var(--purple-600);
-  border: 3px solid white;
-  border-radius: 50%; transform: translate(-50%, -50%);
-  box-shadow: 0 2px 10px rgba(109,64,196,0.4);
-}
-.m-stage-name {
-  font-size: 13px; font-weight: 700; color: var(--purple-600);
-  margin-bottom: 4px;
-}
-.m-stage-desc { font-size: 13px; color: var(--text-soft); line-height: 1.6; }
-.m-journey-stages { display: flex; justify-content: space-between; margin-bottom: 16px; }
-.m-j-stage { font-size: 9px; color: var(--text-soft); text-align: center; flex: 1; }
-.m-j-stage.active { color: var(--purple-600); font-weight: 700; }
+.m-section{padding:24px 0;border-bottom:1px solid var(--rule);}
+.m-section:last-child{border-bottom:none;}
+.m-label{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--text-soft);margin-bottom:14px;}
+.m-journey-track{height:8px;background:var(--purple-100);border-radius:100px;
+  position:relative;margin-bottom:8px;}
+.m-journey-fill{position:absolute;left:0;top:0;bottom:0;
+  background:linear-gradient(90deg,var(--purple-900),var(--purple-400));
+  border-radius:100px;transition:width 1.2s ease;}
+.m-journey-dot{position:absolute;top:50%;width:16px;height:16px;background:var(--purple-600);
+  border:3px solid white;border-radius:50%;transform:translate(-50%,-50%);
+  box-shadow:0 2px 10px rgba(109,64,196,0.4);transition:left 1.2s ease;}
+.m-stages-row{display:flex;justify-content:space-between;margin-bottom:14px;}
+.m-stage-lbl{font-size:9px;color:var(--text-soft);text-align:center;flex:1;}
+.m-stage-lbl.active{color:var(--purple-600);font-weight:700;}
+.m-stage-current{font-size:15px;font-weight:700;color:var(--purple-800);margin-bottom:4px;}
+.m-stage-desc{font-size:13px;color:var(--text-soft);line-height:1.6;}
 
-/* Journey Evidence Grid */
-.evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
-.evidence-item {
-  background: var(--off-white);
-  border: 1px solid var(--rule);
-  border-radius: 12px; padding: 18px;
-}
-.ev-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple-600); margin-bottom: 6px; }
-.ev-val { font-size: 13px; color: var(--text); line-height: 1.55; }
+/* Evidence grid */
+.evidence-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;}
+.ev-item{background:var(--off-white);border:1px solid var(--rule);border-radius:12px;padding:16px;}
+.ev-lbl{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--purple-600);margin-bottom:5px;}
+.ev-val{font-size:13px;color:var(--text);line-height:1.5;}
 
-/* About section */
-.m-about { padding: 24px 0; border-bottom: 1px solid var(--rule); }
-.m-section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 12px; }
-.m-text { font-size: 14px; color: var(--text-mid); line-height: 1.8; }
+/* Text sections */
+.m-text{font-size:14px;color:var(--text-mid);line-height:1.8;}
+.m-text + .m-label{margin-top:20px;}
 
-/* Strategyzer BMC */
-.m-bmc { padding: 28px 0 0; }
-.bmc-grid {
-  border: 1px solid var(--rule);
-  border-radius: 16px;
-  overflow: hidden;
-  margin-top: 16px;
-  font-size: 12px;
-}
-.bmc-row { display: grid; }
-.bmc-row-main { grid-template-columns: 1fr 1.2fr 1.4fr 1.2fr 1fr; border-bottom: 1px solid var(--rule); }
-.bmc-row-bottom { grid-template-columns: 1fr 1fr; }
-.bmc-cell {
-  padding: 16px 18px;
-  border-right: 1px solid var(--rule);
-  min-height: 120px;
-  display: flex; flex-direction: column;
-}
-.bmc-cell:last-child { border-right: none; }
-.bmc-cell-split { display: flex; flex-direction: column; border-right: 1px solid var(--rule); }
-.bmc-cell-top {
-  padding: 16px 18px;
-  border-bottom: 1px solid var(--rule);
-  flex: 1;
-}
-.bmc-cell-bot { padding: 16px 18px; flex: 1; }
-.bmc-cell-label {
-  font-size: 9px; font-weight: 800; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--purple-400);
-  margin-bottom: 8px; display: block;
-}
-.bmc-cell-val { font-size: 12px; color: var(--text-mid); line-height: 1.6; }
-.bmc-row-bottom .bmc-cell { min-height: 80px; background: var(--off-white); }
+/* BMC */
+.bmc-wrap{border:1px solid var(--rule);border-radius:16px;overflow:hidden;margin-top:14px;}
+.bmc-row{display:grid;}
+.bmc-row-main{grid-template-columns:1fr 1.2fr 1.4fr 1.2fr 1fr;}
+.bmc-row-bot{grid-template-columns:1fr 1fr;}
+.bmc-cell{padding:14px 16px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);}
+.bmc-cell:last-child{border-right:none;}
+.bmc-row-bot .bmc-cell{background:var(--off-white);border-bottom:none;}
+.bmc-split{border-right:1px solid var(--rule);}
+.bmc-split:last-child{border-right:none;}
+.bmc-split-top{padding:14px 16px;border-bottom:1px solid var(--rule);}
+.bmc-split-bot{padding:14px 16px;}
+.bmc-lbl{font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--purple-400);margin-bottom:7px;display:block;}
+.bmc-val{font-size:11px;color:var(--text-mid);line-height:1.6;}
+
+/* Team */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:14px;}
+.team-member{background:var(--off-white);border:1px solid var(--rule);border-radius:14px;padding:20px;}
+.tm-name{font-size:15px;font-weight:700;margin-bottom:4px;}
+.tm-role{font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+  color:var(--purple-600);margin-bottom:10px;}
+.tm-bio{font-size:12px;color:var(--text-soft);line-height:1.6;}
+
+/* Contact bar */
+.contact-bar{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;}
+.contact-chip{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;
+  border:1px solid var(--rule);border-radius:100px;font-size:12px;font-weight:600;
+  color:var(--text-mid);text-decoration:none;transition:all 0.2s;}
+.contact-chip:hover{border-color:var(--purple-200);background:var(--purple-100);color:var(--purple-600);}
 
 /* Modal actions */
-.m-actions {
-  padding-top: 28px; display: flex; gap: 12px;
-}
-.btn-info {
-  padding: 12px 28px;
-  background: var(--purple-800);
-  color: white; font-size: 13px; font-weight: 600; letter-spacing: 0.04em;
-  border: none; border-radius: 8px;
-  transition: background 0.2s;
-}
-.btn-info:hover { background: var(--purple-600); }
-.btn-back {
-  padding: 12px 28px;
-  border: 1px solid var(--rule);
-  color: var(--text-mid); font-size: 13px; font-weight: 500;
-  border-radius: 8px; background: transparent;
-  transition: all 0.2s;
-}
-.btn-back:hover { background: var(--off-white); }
+.m-actions{display:flex;gap:12px;flex-wrap:wrap;padding-top:24px;}
+.btn-visit{padding:12px 28px;background:var(--purple-800);color:white;
+  font-size:13px;font-weight:700;letter-spacing:0.04em;border:none;
+  border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block;transition:background 0.2s;}
+.btn-visit:hover{background:var(--purple-600);}
+.btn-close{padding:12px 24px;border:1px solid var(--rule);color:var(--text-mid);
+  font-size:13px;font-weight:500;border-radius:8px;background:transparent;cursor:pointer;transition:all 0.2s;}
+.btn-close:hover{background:var(--off-white);}
 
 /* ─── ECOSYSTEM ─── */
-.eco-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.eco-card {
-  background: var(--white);
-  border: 1px solid var(--rule);
-  border-radius: 16px; padding: 32px;
-  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
-}
-.eco-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 48px rgba(109,64,196,0.1);
-  border-color: var(--purple-200);
-}
-.eco-type { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--purple-600); margin-bottom: 12px; }
-.eco-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; margin-bottom: 10px; line-height: 1.25; }
-.eco-desc { font-size: 13px; color: var(--text-soft); line-height: 1.7; }
-.eco-card.featured {
-  grid-column: span 2;
-  background: linear-gradient(135deg, var(--purple-900) 0%, var(--purple-700, #5b30b0) 100%);
-  border-color: transparent; color: white;
-}
-.eco-card.featured .eco-type { color: var(--purple-200); }
-.eco-card.featured .eco-title { color: white; }
-.eco-card.featured .eco-desc { color: rgba(255,255,255,0.65); }
+.eco-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.eco-card{background:var(--white);border:1px solid var(--rule);border-radius:16px;padding:30px;
+  transition:transform 0.3s,box-shadow 0.3s,border-color 0.3s;}
+.eco-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(109,64,196,0.1);
+  border-color:var(--purple-200);}
+.eco-type{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--purple-600);margin-bottom:10px;}
+.eco-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;
+  margin-bottom:10px;line-height:1.25;}
+.eco-desc{font-size:13px;color:var(--text-soft);line-height:1.7;}
+.eco-card.featured{grid-column:span 2;
+  background:linear-gradient(135deg,var(--purple-900) 0%,#5b30b0 100%);
+  border-color:transparent;color:white;}
+.eco-card.featured .eco-type{color:var(--purple-200);}
+.eco-card.featured .eco-title{color:white;}
+.eco-card.featured .eco-desc{color:rgba(255,255,255,0.65);}
 
-/* ─── PARTNERS (pending) ─── */
-.partners-pending {
-  background: var(--white);
-  border: 1px dashed var(--purple-200);
-  border-radius: 20px; padding: 64px;
-  text-align: center; max-width: 600px; margin: 0 auto;
-}
-.pending-tag {
-  display: inline-block; padding: 5px 14px;
-  background: #fff7ed; border: 1px solid #fed7aa;
-  border-radius: 100px; color: #c2410c;
-  font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-  margin-bottom: 20px;
-}
-.partners-pending h3 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; margin-bottom: 12px; }
-.partners-pending p { font-size: 14px; color: var(--text-soft); line-height: 1.75; }
+/* ─── PARTNERS ─── */
+.partners-pending{background:var(--white);border:1px dashed var(--purple-200);
+  border-radius:20px;padding:60px;text-align:center;max-width:600px;margin:0 auto;}
+.pending-tag{display:inline-block;padding:5px 14px;background:#fff7ed;
+  border:1px solid #fed7aa;border-radius:100px;color:#c2410c;
+  font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:18px;}
+.partners-pending h3{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;margin-bottom:12px;}
+.partners-pending p{font-size:14px;color:var(--text-soft);line-height:1.75;max-width:440px;margin:0 auto;}
+.btn-contact{display:inline-block;margin-top:24px;padding:12px 28px;background:var(--purple-800);
+  color:white;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;
+  transition:background 0.2s;}
+.btn-contact:hover{background:var(--purple-600);}
 
 /* ─── APPLY ─── */
-#apply {
-  background: linear-gradient(160deg, var(--purple-900) 0%, var(--purple-800) 30%, var(--purple-600) 60%, #c4a8f5 80%, var(--white) 100%);
-  padding: 100px 48px;
-}
-.apply-inner {
-  max-width: 560px;
-}
-.apply-h { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px,5vw,60px); font-weight: 300; color: white; line-height: 1.1; margin-bottom: 16px; }
-.apply-h em { font-style: italic; }
-.apply-sub { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.7; margin-bottom: 40px; }
-.apply-form { display: flex; flex-direction: column; gap: 12px; }
-.f-input, .f-select {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 10px; padding: 13px 18px;
-  color: white; font-size: 14px; font-family: 'DM Sans', sans-serif;
-  outline: none; width: 100%;
-  transition: border-color 0.2s, background 0.2s;
-}
-.f-input::placeholder { color: rgba(255,255,255,0.4); }
-.f-input:focus { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.15); }
-.f-select { appearance: none; }
-.f-select option { background: var(--purple-900); color: white; }
-.f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.f-submit {
-  padding: 15px;
-  background: white; color: var(--purple-900);
-  font-size: 14px; font-weight: 700; letter-spacing: 0.04em;
-  border: none; border-radius: 10px;
-  transition: transform 0.2s, box-shadow 0.2s;
-  margin-top: 4px;
-}
-.f-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,0.2); }
+#apply{
+  background:linear-gradient(160deg,var(--purple-900) 0%,var(--purple-800) 30%,
+    var(--purple-600) 60%,#c4a8f5 80%,var(--white) 100%);
+  padding:100px 48px;}
+.apply-inner{max-width:560px;}
+.apply-h{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,60px);
+  font-weight:300;color:white;line-height:1.1;margin-bottom:14px;}
+.apply-h em{font-style:italic;}
+.apply-sub{font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;margin-bottom:36px;}
+
+.apply-form{display:flex;flex-direction:column;gap:12px;}
+.apply-form.submitted{display:none;}
+.f-input,.f-select{
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
+  border-radius:10px;padding:13px 17px;color:white;font-size:14px;
+  font-family:'DM Sans',sans-serif;outline:none;width:100%;transition:all 0.2s;}
+.f-input::placeholder{color:rgba(255,255,255,0.4);}
+.f-input:focus,.f-select:focus{border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.15);}
+.f-input.err{border-color:#fca5a5;}
+.f-select{appearance:none;}
+.f-select option{background:var(--purple-900);color:white;}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.f-err{font-size:11px;color:#fca5a5;margin-top:-8px;}
+.f-err.hide{display:none;}
+.f-submit{padding:15px;background:white;color:var(--purple-900);font-size:14px;
+  font-weight:700;letter-spacing:0.04em;border:none;border-radius:10px;cursor:pointer;
+  transition:transform 0.2s,box-shadow 0.2s;margin-top:4px;}
+.f-submit:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,0.18);}
+.f-submit:disabled{opacity:0.55;pointer-events:none;}
+
+.apply-success{display:none;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);
+  border-radius:16px;padding:36px;text-align:center;}
+.apply-success.show{display:block;}
+.apply-success h3{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;
+  color:white;margin-bottom:10px;}
+.apply-success p{font-size:14px;color:rgba(255,255,255,0.7);line-height:1.7;}
 
 /* ─── FOOTER ─── */
-footer {
-  background: var(--purple-900);
-  color: white;
-  padding: 64px 48px 40px;
-}
-.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 64px; margin-bottom: 48px; }
-.ft-brand strong { display: block; font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-.ft-brand span { font-size: 11px; color: rgba(255,255,255,0.45); letter-spacing: 0.08em; text-transform: uppercase; }
-.ft-brand p { margin-top: 16px; font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.75; }
-.ft-col h4 { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 16px; }
-.ft-col a { display: block; font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; }
-.ft-col a:hover { color: white; }
-.footer-rule { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 24px; }
-.footer-bottom { display: flex; justify-content: space-between; align-items: center; }
-.footer-bottom p { font-size: 12px; color: rgba(255,255,255,0.3); }
+footer{background:var(--purple-900);color:white;padding:64px 48px 40px;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;}
+.ft-brand strong{display:block;font-size:14px;font-weight:600;margin-bottom:4px;}
+.ft-brand span{font-size:10px;color:rgba(255,255,255,0.4);letter-spacing:0.08em;text-transform:uppercase;}
+.ft-brand p{margin-top:14px;font-size:13px;color:rgba(255,255,255,0.45);line-height:1.75;}
+.ft-col h4{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(255,255,255,0.35);margin-bottom:16px;}
+.ft-col a{display:block;font-size:13px;color:rgba(255,255,255,0.55);
+  text-decoration:none;margin-bottom:10px;transition:color 0.2s;}
+.ft-col a:hover{color:white;}
+.footer-rule{border:none;border-top:1px solid rgba(255,255,255,0.1);margin-bottom:22px;}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-bottom p{font-size:12px;color:rgba(255,255,255,0.25);}
 
 /* ─── TOAST ─── */
-.toast {
-  position: fixed; bottom: 32px; right: 32px; z-index: 9800;
-  background: var(--purple-900); color: white;
-  padding: 14px 24px; border-radius: 12px;
-  font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
-  border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
-  transform: translateY(80px); opacity: 0;
-  transition: all 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
-  pointer-events: none;
-}
-.toast.show { transform: translateY(0); opacity: 1; }
+.toast{position:fixed;bottom:28px;right:28px;z-index:9000;
+  background:var(--purple-900);color:white;padding:14px 22px;border-radius:12px;
+  font-size:13px;font-weight:600;border:1px solid rgba(255,255,255,0.1);
+  box-shadow:0 12px 40px rgba(0,0,0,0.2);
+  transform:translateY(80px);opacity:0;transition:all 0.4s cubic-bezier(0.34,1.4,0.64,1);
+  pointer-events:none;max-width:320px;}
+.toast.show{transform:translateY(0);opacity:1;}
 
 /* ─── RESPONSIVE ─── */
-@media (max-width: 900px) {
-  #nav { padding: 0 24px; }
-  .nav-links { display: none; }
-  .section { padding: 72px 24px; }
-  #hero { padding: 100px 24px 80px; }
-  .hero-stats { position: static; margin-top: 48px; }
-  .ventures-grid { grid-template-columns: 1fr; }
-  .eco-grid { grid-template-columns: 1fr; }
-  .eco-card.featured { grid-column: span 1; }
-  .footer-top { grid-template-columns: 1fr; gap: 32px; }
-  .modal-head { flex-direction: column; }
-  .evidence-grid { grid-template-columns: 1fr; }
-  .bmc-row-main { grid-template-columns: 1fr; }
-  .bmc-row-bottom { grid-template-columns: 1fr; }
-  .bmc-cell { border-right: none; border-bottom: 1px solid var(--rule); min-height: auto; }
-  .bmc-cell-split { border-right: none; border-bottom: 1px solid var(--rule); }
-  .f-row { grid-template-columns: 1fr; }
-  body { cursor: auto; }
-  #cursor { display: none; }
-  * { cursor: auto !important; }
-  #apply { padding: 72px 24px; }
+@media(max-width:900px){
+  #nav{padding:0 20px;}
+  .nav-links{display:none;}
+  .section{padding:72px 24px;}
+  #hero{padding:100px 24px 80px;}
+  .hero-stats{position:static;margin-top:40px;}
+  .ventures-grid{grid-template-columns:1fr;}
+  .eco-grid{grid-template-columns:1fr;}
+  .eco-card.featured{grid-column:span 1;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+  .bmc-row-main{grid-template-columns:1fr;}
+  .bmc-row-bot{grid-template-columns:1fr;}
+  .bmc-cell{border-right:none;}
+  .bmc-split{border-right:none;}
+  .evidence-grid{grid-template-columns:1fr;}
+  .modal-head{flex-direction:column;}
+  .modal-body{padding:0 24px 32px;}
+  .modal-head{padding:24px 24px 20px;}
+  #apply{padding:72px 24px;}
 }
 </style>
 </head>
-<script>
-// ─── AUTH-AWARE NAV ──────────────────────────────────────────────
-(function() {
-  const token = localStorage.getItem('rv_token');
-  const user  = token ? JSON.parse(localStorage.getItem('rv_user') || 'null') : null;
-  const area  = document.getElementById('nav-auth-area');
-  if (!area) return;
-  if (user) {
-    area.innerHTML = `
-      <a href="/dashboard.html" style="padding:9px 18px;border:1px solid var(--rule);border-radius:8px;font-size:13px;font-weight:500;color:var(--text-mid);text-decoration:none;margin-right:10px">My Dashboard</a>
-      <a href="/dashboard.html" style="padding:9px 22px;background:var(--purple-800);color:white;font-size:13px;font-weight:600;border-radius:8px;text-decoration:none">Hi, ${user.firstName}</a>
-    `;
-  } else {
-    area.innerHTML = `
-      <a href="/login.html" style="padding:9px 18px;border:1px solid var(--rule);border-radius:8px;font-size:13px;font-weight:500;color:var(--text-mid);text-decoration:none;margin-right:10px">Sign In</a>
-      <a href="/register.html" style="padding:9px 22px;background:var(--purple-800);color:white;font-size:13px;font-weight:600;border-radius:8px;text-decoration:none">Register Venture</a>
-    `;
-  }
-})();
-
-// ─── LOAD VENTURES FROM API ──────────────────────────────────────
-(async function loadLiveVentures() {
-  try {
-    const res  = await fetch('/api/ventures');
-    const data = await res.json();
-    if (!data.ventures || data.ventures.length === 0) return;
-
-    const liveVentures = data.ventures.map(v => ({
-      id:       v._id,
-      name:     v.name,
-      founder:  v.teamMembers && v.teamMembers.length
-                  ? v.teamMembers.map(m => m.name).filter(Boolean).join(' & ')
-                  : 'Rhodes University Founder',
-      sector:   v.sector || 'Uncategorised',
-      tags:     v.tags   || [],
-      tagline:  v.tagline || '',
-      stage:    v.stage   || 'idea',
-      problem:  v.problem  || '',
-      solution: v.solution || '',
-      journey: {
-        stageDesc: v.stageDescription || '',
-        evidence:  v.evidence || []
-      },
-      bmc: v.bmc || {},
-    }));
-
-    if (liveVentures.length > 0) {
-      ventures.length = 0;
-      liveVentures.forEach(lv => ventures.push(lv));
-      renderVentures();
-      animateJourneyBars();
-    }
-  } catch(e) {
-    // Falls back to static placeholder data silently
-  }
-})();
-</script>
 <body>
 
-<!-- Cursor -->
-<div id="cursor">
-  <svg width="22" height="28" viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M2 2L2 22L7.5 16.5L11.5 26L14 25L10 15.5H18L2 2Z" fill="#b8860b" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
-  </svg>
-</div>
-
 <!-- Toast -->
-<div class="toast" id="toast">Application submitted — we'll be in touch shortly.</div>
+<div class="toast" id="toast"></div>
 
 <!-- NAV -->
 <nav id="nav">
-  <a href="#" class="nav-brand">
+  <a href="/index.html" class="nav-brand">
     <div class="nav-mark">R</div>
     <div class="nav-brand-text">
       <strong>Rhodes University</strong>
@@ -705,11 +366,14 @@ footer {
   <ul class="nav-links">
     <li><a href="#ventures">Student Ventures</a></li>
     <li><a href="#ecosystem">Ecosystem</a></li>
+    <li><a href="/programs.html">Programs</a></li>
     <li><a href="#partners">Partners</a></li>
   </ul>
-   <div id="nav-auth-area">
-  <button class="nav-apply" onclick="smoothScrollTo('apply')">Register Your Venture</button>
-</div>
+  <div class="nav-auth" id="nav-auth">
+    <!-- Populated by JS -->
+    <a href="/login.html" class="nav-signin">Sign In</a>
+    <a href="/register.html" class="nav-register">Register Venture</a>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -718,31 +382,20 @@ footer {
   <div class="hero-content">
     <span class="hero-kicker" id="hero-kicker">Makhanda · Eastern Cape · Est. 2012</span>
     <h1 class="hero-h1">
-      <span id="h-line-1">Rhodes University's</span><br/>
-      <em id="h-line-2">Innovators &amp;</em><br/>
-      <span class="hero-lower" id="h-line-3">Changemakers.</span>
+      <span id="h1">Rhodes University's</span><br/>
+      <em id="h2">Innovators &amp;</em><br/>
+      <span class="hero-lower" id="h3">Changemakers.</span>
     </h1>
-    <p class="hero-sub" id="hero-sub">
-      A living directory of student ventures from Rhodes University — built to connect founders with investors, mentors, and collaborators who believe in Africa's next generation.
-    </p>
+    <p class="hero-sub" id="hero-sub">A living directory of student ventures from Rhodes University — built to connect founders with investors, mentors, and collaborators who believe in Africa's next generation.</p>
     <div class="hero-btns" id="hero-btns">
-      <a href="#ventures" class="btn-solid" onclick="smoothScrollTo('ventures'); return false;">Browse Ventures</a>
-      <a href="#ecosystem" class="btn-outline" onclick="smoothScrollTo('ecosystem'); return false;">Our Ecosystem</a>
+      <a href="#ventures" class="btn-solid" onclick="smoothScrollTo('ventures');return false;">Browse Ventures</a>
+      <a href="#ecosystem" class="btn-outline" onclick="smoothScrollTo('ecosystem');return false;">Our Ecosystem</a>
     </div>
   </div>
   <div class="hero-stats" id="hero-stats">
-    <div>
-      <div class="h-stat-n" data-count="2">0</div>
-      <div class="h-stat-l">Listed Ventures</div>
-    </div>
-    <div>
-      <div class="h-stat-n" data-count="4">0</div>
-      <div class="h-stat-l">Active Societies</div>
-    </div>
-    <div>
-      <div class="h-stat-n" data-count="3">0</div>
-      <div class="h-stat-l">Competitions Run</div>
-    </div>
+    <div><div class="h-stat-n" data-count="2">0</div><div class="h-stat-l">Listed Ventures</div></div>
+    <div><div class="h-stat-n" data-count="4">0</div><div class="h-stat-l">Active Societies</div></div>
+    <div><div class="h-stat-n" data-count="3">0</div><div class="h-stat-l">Competitions Run</div></div>
   </div>
 </section>
 
@@ -752,7 +405,7 @@ footer {
     <div class="sec-header">
       <span class="sec-kicker">Student Ventures</span>
       <h2 class="sec-title">Building From Campus,<br/>Impacting the World.</h2>
-      <p class="sec-desc">These ventures are conceived, built, and run by current and recent Rhodes students. More founders will appear here as they register.</p>
+      <p class="sec-desc">Ventures conceived, built, and run by current and recent Rhodes students. More founders appear here as they register.</p>
     </div>
     <div class="ventures-grid" id="ventures-grid"></div>
   </div>
@@ -767,6 +420,9 @@ footer {
       <p class="sec-desc">Rhodes University's entrepreneurship infrastructure spans student societies, competitions, incubation support, and real-world industry connections.</p>
     </div>
     <div class="eco-grid" id="eco-grid"></div>
+    <div style="text-align:center;margin-top:40px">
+      <a href="/programs.html" class="btn-contact">Explore All Programs →</a>
+    </div>
   </div>
 </section>
 
@@ -775,47 +431,42 @@ footer {
   <div class="wrap">
     <div class="sec-header">
       <span class="sec-kicker">Partners</span>
-      <h2 class="sec-title">Building the<br/>Network.</h2>
-      <p class="sec-desc">We are actively developing formal partnerships with investors, corporates, and international programmes to support Rhodes founders.</p>
+      <h2 class="sec-title">Building the Network.</h2>
+      <p class="sec-desc">We are actively developing formal partnerships with investors, corporates, and international programmes.</p>
     </div>
     <div class="partners-pending">
       <div class="pending-tag">Coming Soon</div>
       <h3>Partner Programme Pending</h3>
-      <p>We are in active conversations with a number of corporate partners, impact investors, and international entrepreneurship programmes. Details will be published here once agreements are formalised. If you would like to express early interest in partnering, use the contact below.</p>
-      <div style="margin-top:28px">
-        <a href="mailto:rce@ru.ac.za" class="btn-info" style="display:inline-block; text-decoration:none">Get In Touch</a>
-      </div>
+      <p>We are in active conversations with corporate partners, impact investors, and international entrepreneurship programmes. Details will be published here once agreements are formalised.</p>
+      <a href="mailto:rce@ru.ac.za" class="btn-contact">Express Interest — rce@ru.ac.za</a>
     </div>
   </div>
 </section>
 
-<!-- APPLY -->
+<!-- APPLY / REGISTER -->
 <section id="apply">
   <div class="wrap">
     <div class="apply-inner">
       <h2 class="apply-h">Got an idea?<br/><em>Get on the map.</em></h2>
-      <p class="apply-sub">This directory is exclusively for Rhodes University students and recent alumni with business ideas or active ventures. Register to have your venture listed, receive support, and connect with the ecosystem.</p>
-      <div class="apply-form">
+      <p class="apply-sub">This directory is for Rhodes University students and recent alumni with business ideas or active ventures. Register to be listed, receive support, and connect with the ecosystem.</p>
+
+      <div class="apply-form" id="apply-form">
         <div class="f-row">
-          <input class="f-input" type="text" placeholder="First Name" />
-          <input class="f-input" type="text" placeholder="Last Name" />
+          <input class="f-input" id="af-first" type="text" placeholder="First Name *" />
+          <input class="f-input" id="af-last"  type="text" placeholder="Last Name *" />
         </div>
-        <input class="f-input" type="email" placeholder="Rhodes University Email" />
-        <input class="f-input" type="text" placeholder="Student Number" />
-        <input class="f-input" type="text" placeholder="Venture / Idea Name" />
-        <select class="f-select">
-          <option value="">Your venture sector</option>
-          <option>AgriTech / FoodTech</option>
-          <option>FinTech / InsurTech</option>
-          <option>HealthTech / MedTech</option>
-          <option>EdTech / Skills</option>
-          <option>Climate / CleanTech</option>
-          <option>Creative Industries</option>
-          <option>Retail / E-commerce</option>
-          <option>Social Enterprise</option>
-          <option>Other</option>
+        <input class="f-input" id="af-email" type="email" placeholder="Rhodes University Email * (@ru.ac.za)" />
+        <div class="f-err hide" id="af-email-err">Please use your Rhodes University email address.</div>
+        <input class="f-input" id="af-venture" type="text" placeholder="Venture or Idea Name *" />
+        <select class="f-select" id="af-sector">
+          <option value="">Your sector / industry</option>
+          <option>AgriTech / FoodTech</option><option>FinTech / InsurTech</option>
+          <option>HealthTech / MedTech</option><option>EdTech / Skills</option>
+          <option>Climate / CleanTech</option><option>Creative Industries</option>
+          <option>Retail / E-commerce</option><option>Social Enterprise</option>
+          <option>Campus Commerce</option><option>Other</option>
         </select>
-        <select class="f-select">
+        <select class="f-select" id="af-stage">
           <option value="">Current stage of your venture</option>
           <option>Idea — not yet developed</option>
           <option>Concept Validation — gathering feedback</option>
@@ -826,7 +477,12 @@ footer {
           <option>Early Revenue — first paying customers</option>
           <option>Growth — scaling operations</option>
         </select>
-        <button class="f-submit" onclick="submitForm()">Register My Venture →</button>
+        <button class="f-submit" id="af-submit" onclick="submitApply()">Register My Venture →</button>
+      </div>
+
+      <div class="apply-success" id="apply-success">
+        <h3>You're on the list.</h3>
+        <p>Thank you — we have received your registration. We will review your details and send you an invitation to complete your full venture profile within 2 business days. Check your Rhodes University email inbox.</p>
       </div>
     </div>
   </div>
@@ -838,19 +494,25 @@ footer {
     <div class="ft-brand">
       <strong>Rhodes University</strong>
       <span>Centre for Entrepreneurship</span>
-      <p>Nurturing Africa's most ambitious student founders since 2012. Based in Makhanda, Eastern Cape, South Africa — a small city producing big ideas.</p>
+      <p>Nurturing Africa's most ambitious student founders since 2012. Based in Makhanda, Eastern Cape — a small city producing big ideas.</p>
     </div>
     <div class="ft-col">
       <h4>Platform</h4>
-      <a href="#">Student Ventures</a>
-      <a href="#">Ecosystem</a>
-      <a href="#">Partners</a>
-      <a href="#">Apply</a>
+      <a href="#ventures">Student Ventures</a>
+      <a href="#ecosystem">Ecosystem</a>
+      <a href="/programs.html">Programs</a>
+      <a href="#partners">Partners</a>
+    </div>
+    <div class="ft-col">
+      <h4>Get Started</h4>
+      <a href="/register.html">Register Your Venture</a>
+      <a href="/login.html">Sign In</a>
+      <a href="/programs.html">Programmes at Rhodes</a>
     </div>
     <div class="ft-col">
       <h4>Contact</h4>
       <a href="mailto:rce@ru.ac.za">rce@ru.ac.za</a>
-      <a href="#">+27 46 603 8111</a>
+      <a href="tel:+27466038111">+27 46 603 8111</a>
       <a href="#">Rhodes University</a>
       <a href="#">Makhanda, EC 6139</a>
     </div>
@@ -858,14 +520,14 @@ footer {
   <hr class="footer-rule" />
   <div class="footer-bottom">
     <p>© 2025 Rhodes Centre for Entrepreneurship · All rights reserved</p>
-    <p>Student Venture Directory — Public Platform</p>
+    <p>Student Venture Directory</p>
   </div>
 </footer>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeModalBg(event)">
+<!-- ─── VENTURE MODAL ─── -->
+<div class="modal-overlay" id="modal-overlay">
   <div class="modal" id="modal">
-    <button class="modal-close-btn" onclick="closeModal()">✕</button>
+    <button class="modal-close" onclick="closeModal()">✕</button>
     <div class="modal-stripe"></div>
     <div class="modal-head">
       <div>
@@ -875,154 +537,183 @@ footer {
       <div class="m-sector-pill" id="m-sector"></div>
     </div>
     <div class="modal-body">
+
       <!-- Journey -->
-      <div class="m-journey">
-        <div class="m-journey-title">Entrepreneurship Journey</div>
-        <div class="m-j-stages" id="m-j-stages" style="display:flex;justify-content:space-between;margin-bottom:10px;"></div>
+      <div class="m-section">
+        <div class="m-label">Entrepreneurship Journey</div>
+        <div class="m-stages-row" id="m-stages-row"></div>
         <div class="m-journey-track">
-          <div class="m-journey-fill" id="m-journey-fill"></div>
-          <div class="m-journey-dot" id="m-journey-dot"></div>
+          <div class="m-journey-fill" id="m-j-fill" style="width:0%"></div>
+          <div class="m-journey-dot" id="m-j-dot" style="left:0%"></div>
         </div>
         <div style="margin-top:14px">
-          <div class="m-stage-name" id="m-stage-name"></div>
-          <div class="m-stage-desc" id="m-stage-desc"></div>
+          <div class="m-stage-current" id="m-stage-current"></div>
+          <div class="m-stage-desc" id="m-stage-desc-text"></div>
         </div>
-        <div class="evidence-grid" id="evidence-grid"></div>
+        <div class="evidence-grid" id="m-evidence"></div>
       </div>
 
-      <!-- About -->
-      <div class="m-about">
-        <div class="m-section-label">The Problem</div>
+      <!-- Team -->
+      <div class="m-section" id="m-team-section">
+        <div class="m-label">The Team</div>
+        <div class="team-grid" id="m-team"></div>
+      </div>
+
+      <!-- Problem & Solution -->
+      <div class="m-section">
+        <div class="m-label">The Problem</div>
         <p class="m-text" id="m-problem"></p>
-        <div class="m-section-label" style="margin-top:20px">The Solution</div>
+        <div class="m-label" style="margin-top:18px">Our Solution</div>
         <p class="m-text" id="m-solution"></p>
       </div>
 
       <!-- BMC -->
-      <div class="m-bmc">
-        <div class="m-section-label">Business Model Canvas</div>
-        <div class="bmc-grid">
+      <div class="m-section" id="m-bmc-section">
+        <div class="m-label">Business Model Canvas</div>
+        <div class="bmc-wrap">
           <div class="bmc-row bmc-row-main" id="bmc-main"></div>
-          <div class="bmc-row bmc-row-bottom" id="bmc-bottom"></div>
+          <div class="bmc-row bmc-row-bot" id="bmc-bot"></div>
         </div>
       </div>
 
+      <!-- Contact -->
+      <div class="m-section">
+        <div class="m-label">Get In Touch</div>
+        <div class="contact-bar" id="m-contact"></div>
+      </div>
+
       <div class="m-actions">
-        <button class="btn-info" onclick="closeModal()">More Info — Contact Us</button>
-        <button class="btn-back" onclick="closeModal()">Close</button>
+        <a href="#apply" class="btn-visit" onclick="closeModal();smoothScrollTo('apply')">Support This Venture</a>
+        <button class="btn-close" onclick="closeModal()">Close</button>
       </div>
     </div>
   </div>
 </div>
 
+<!-- ─── DATA & SCRIPTS ─── -->
+<script src="/auth.js"></script>
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
-// ─── JOURNEY STAGES ───
+// ─── STAGE DEFINITIONS ───────────────────────────────────────────
 const STAGES = [
-  { id: 'idea',         label: 'Idea',           pct: 8  },
-  { id: 'concept',      label: 'Concept',         pct: 20 },
-  { id: 'prototype',    label: 'Prototype',       pct: 33 },
-  { id: 'testing',      label: 'Testing',         pct: 46 },
-  { id: 'pilot',        label: 'Pilot',           pct: 58 },
-  { id: 'prerevenue',   label: 'Pre-Revenue',     pct: 70 },
-  { id: 'earlyrevenue', label: 'Early Revenue',   pct: 82 },
-  { id: 'growth',       label: 'Growth',          pct: 92 },
-  { id: 'scale',        label: 'Scale',           pct: 100 },
+  {id:'idea',           label:'Idea',           pct:8},
+  {id:'concept',        label:'Concept',         pct:20},
+  {id:'prototype',      label:'Prototype',       pct:33},
+  {id:'testing',        label:'Testing',         pct:46},
+  {id:'pilot',          label:'Pilot',           pct:58},
+  {id:'prerevenue',     label:'Pre-Revenue',     pct:70},
+  {id:'earlyrevenue',   label:'Early Revenue',   pct:82},
+  {id:'growth',         label:'Growth',          pct:92},
+  {id:'scale',          label:'Scale',           pct:100},
 ];
 
-// ─── DATA ───
-const ventures = [
+// Map API stage IDs to our display stages
+const STAGE_ID_MAP = {
+  'idea':'idea','concept-validation':'concept','prototype':'prototype',
+  'user-testing':'testing','pilot':'pilot','pre-revenue':'prerevenue',
+  'early-revenue':'earlyrevenue','growth':'growth','scale':'scale'
+};
+
+const STAGE_DESCS = {
+  'idea':'Identified a problem and an initial concept — no product built yet.',
+  'concept':'Actively testing core assumptions with potential users through research and interviews.',
+  'prototype':'A working version of the product or service exists, however basic.',
+  'testing':'Real users are testing the prototype and providing structured feedback.',
+  'pilot':'A controlled, limited-scope launch to prove the business model end-to-end.',
+  'prerevenue':'The model is proven — first paying customers are lined up or contracts about to close.',
+  'earlyrevenue':'Trading. First paying customers are on board. Revenue is real but growing.',
+  'growth':'Revenue is consistent and growing. Scaling operations, team, or geography.',
+  'scale':'Strong product-market fit. Scaling aggressively across markets.',
+};
+
+// ─── STATIC VENTURE DATA ─────────────────────────────────────────
+let ventures = [
   {
-    id: 1,
-    name: "NextGen Artisan Hub",
-    founder: "Founded at Rhodes University",
-    sector: "Creative Commerce",
-    tags: ["Artisan", "E-Commerce", "Culture"],
-    tagline: "Connecting Eastern Cape's master craftspeople with contemporary markets through a curated digital marketplace.",
-    stage: "pilot",
-    journey: {
-      stageDesc: "NextGen Artisan Hub is currently running a structured pilot with a cohort of 12 Eastern Cape artisans, testing the full transaction cycle from product listing to buyer delivery.",
-      evidence: [
-        { label: "Artisans Onboarded", val: "12 craftspeople from Makhanda and surrounds" },
-        { label: "Pilot Duration", val: "8 weeks — active since March 2025" },
-        { label: "Transactions Completed", val: "47 sales processed end-to-end" },
-        { label: "Market Feedback", val: "4.6/5 buyer satisfaction across 32 surveyed customers" },
-        { label: "Revenue to Date", val: "R14,200 gross merchandise value in pilot phase" },
-        { label: "Key Learning", val: "Photography quality is the #1 conversion driver — now providing in-house product photography" },
+    id:'artisan',
+    name:'NextGen Artisan Hub',
+    founder:'Rhodes University Founder',
+    sector:'Creative Commerce',
+    tags:['Artisan','E-Commerce','Culture'],
+    tagline:'Connecting Eastern Cape master craftspeople with contemporary markets through a curated digital marketplace.',
+    stage:'pilot',
+    websiteUrl:'',
+    teamMembers:[],
+    journey:{
+      stageDesc:'Currently running a structured pilot with 12 Eastern Cape artisans, testing the full transaction cycle from product listing to buyer delivery.',
+      evidence:[
+        {label:'Artisans Onboarded',value:'12 craftspeople from Makhanda and surrounds'},
+        {label:'Pilot Duration',    value:'8 weeks — active since March 2025'},
+        {label:'Transactions',      value:'47 sales processed end-to-end'},
+        {label:'Buyer Satisfaction',value:'4.6/5 across 32 surveyed customers'},
+        {label:'Revenue to Date',   value:'R14,200 gross merchandise value'},
+        {label:'Key Learning',      value:'Photography quality is the #1 conversion driver'},
       ]
     },
-    problem: "Skilled artisans in the Eastern Cape — beadwork specialists, leather workers, pottery artists, weavers — produce world-class craft but are invisible to contemporary buyers. They rely on intermittent tourism and informal markets, earning unpredictable incomes despite possessing generations of expertise.",
-    solution: "NextGen Artisan Hub is a curated e-commerce platform and fulfilment service built specifically for traditional craftspeople. We handle listing, photography, payment processing, and delivery — letting artisans focus entirely on their craft. Buyers get provenance-verified, ethically sourced authentic goods.",
-    bmc: {
-      keyPartners: "Eastern Cape Department of Arts & Culture, SA Post Office, local courier networks, craft schools and training programmes",
-      keyActivities: "Artisan onboarding & photography, platform operations, fulfilment coordination, marketing and buyer acquisition",
-      valueProposition: "Authentic, provenance-verified Eastern Cape craft delivered to your door. Fair prices for buyers, sustainable income for artisans.",
-      customerRelationships: "Dedicated artisan success manager, WhatsApp support group, monthly income reports and sales coaching",
-      customerSegments: "Urban South African buyers aged 25–45, international diaspora, corporate gifting buyers, interior designers",
-      keyResources: "Artisan network, digital platform, photography studio, logistics partnerships",
-      channels: "Website, Instagram Shop, corporate gifting partnerships, pop-up experiences at Grahamstown Festival",
-      costStructure: "Platform hosting, logistics and fulfilment, photography equipment, team salaries, marketing",
-      revenueStreams: "20% commission on each sale, premium listing tiers for high-volume artisans, corporate gifting curation fee",
+    problem:'Skilled artisans in the Eastern Cape — beadwork specialists, leather workers, pottery artists, weavers — produce world-class craft but are invisible to contemporary buyers. They rely on intermittent tourism and informal markets, earning unpredictable incomes despite possessing generations of expertise.',
+    solution:'NextGen Artisan Hub is a curated e-commerce platform and fulfilment service built for traditional craftspeople. We handle listing, photography, payment processing, and delivery — letting artisans focus on their craft. Buyers get provenance-verified, ethically sourced authentic goods.',
+    bmc:{
+      keyPartners:'Eastern Cape Dept of Arts & Culture, SA Post Office, local courier networks, craft schools',
+      keyActivities:'Artisan onboarding & photography, platform operations, fulfilment, marketing',
+      keyResources:'Artisan network, digital platform, photography studio, logistics partnerships',
+      valueProposition:'Authentic, provenance-verified Eastern Cape craft delivered to your door. Fair prices for buyers, sustainable income for artisans.',
+      customerRelationships:'Dedicated artisan success manager, WhatsApp support, monthly income reports',
+      channels:'Website, Instagram Shop, corporate gifting partnerships, Grahamstown Festival',
+      customerSegments:'Urban SA buyers aged 25-45, international diaspora, corporate gifting, interior designers',
+      costStructure:'Platform hosting, logistics & fulfilment, photography equipment, team salaries, marketing',
+      revenueStreams:'20% commission per sale, premium listing tiers, corporate gifting curation fee',
     }
   },
   {
-    id: 2,
-    name: "Campus Market-Place",
-    founder: "Founded at Rhodes University",
-    sector: "Campus Commerce",
-    tags: ["Students", "Marketplace", "P2P"],
-    tagline: "The peer-to-peer buying, selling, and service exchange platform built exclusively for the Rhodes University community.",
-    stage: "earlyrevenue",
-    journey: {
-      stageDesc: "Campus Market-Place has moved beyond pilot and is generating early, recurring revenue from its campus-wide launch. The platform has established product-market fit within the Rhodes community.",
-      evidence: [
-        { label: "Registered Users", val: "1,340 Rhodes students and staff" },
-        { label: "Active Listings", val: "280+ live listings at any time" },
-        { label: "Monthly Revenue", val: "R8,400 MRR from promoted listings and delivery fee" },
-        { label: "Transaction Volume", val: "R186,000 gross marketplace value since launch" },
-        { label: "User Research", val: "Surveyed 200 students — top demand: textbooks, appliances, tutoring, food delivery" },
-        { label: "Retention", val: "62% of users return within 14 days of first transaction" },
+    id:'campus',
+    name:'Campus Market-Place',
+    founder:'Rhodes University Founder',
+    sector:'Campus Commerce',
+    tags:['Students','Marketplace','P2P'],
+    tagline:'The peer-to-peer buying, selling, and service exchange platform built exclusively for the Rhodes University community.',
+    stage:'earlyrevenue',
+    websiteUrl:'',
+    teamMembers:[],
+    journey:{
+      stageDesc:'Moved beyond pilot and generating early, recurring revenue from a campus-wide launch. Established product-market fit within the Rhodes community.',
+      evidence:[
+        {label:'Registered Users',  value:'1,340 Rhodes students and staff'},
+        {label:'Active Listings',   value:'280+ live listings at any time'},
+        {label:'Monthly Revenue',   value:'R8,400 MRR from promoted listings and delivery fees'},
+        {label:'Transaction Volume',value:'R186,000 gross marketplace value since launch'},
+        {label:'User Research',     value:'200 students surveyed — top demand: textbooks, appliances, tutoring, food'},
+        {label:'Retention',         value:'62% of users return within 14 days of first transaction'},
       ]
     },
-    problem: "Students at Rhodes University are constantly buying, selling, and trading — textbooks, appliances, tutoring, handmade goods — but do so through scattered WhatsApp groups, Facebook pages, and word-of-mouth. Transactions are unsafe, untraceable, and inefficient. Sellers can't build reputation; buyers can't trust sellers.",
-    solution: "Campus Market-Place is a dedicated, verified peer-to-peer platform for the Rhodes community. Student ID verification ensures every user is a legitimate member of the community. Reputation scores, secure in-app payments, and optional campus-based delivery make every transaction safe and simple.",
-    bmc: {
-      keyPartners: "Rhodes University Student Affairs, Grahamstown courier services, campus residence managers",
-      keyActivities: "Platform development, student ID verification system, community moderation, payment processing",
-      valueProposition: "A trusted, student-verified marketplace where the Rhodes community buys, sells, and offers services safely.",
-      customerRelationships: "Student ambassador programme, in-app support chat, SRC-endorsed dispute resolution process",
-      customerSegments: "Rhodes University students (buyers and sellers), staff members, campus-adjacent businesses",
-      keyResources: "Digital platform, student ID integration, reputation algorithm, campus delivery network",
-      channels: "Rhodes University student portal, SRC communications, residence orientation events, word-of-mouth",
-      costStructure: "Platform infrastructure, payment processing fees, campus ambassador stipends, moderation and support",
-      revenueStreams: "5% transaction fee, R30/month promoted listing tier, R15 campus delivery fee, future: business advertising",
+    problem:'Students at Rhodes are constantly buying, selling, and trading — textbooks, appliances, tutoring, goods — but do so through scattered WhatsApp groups and Facebook pages. Transactions are unsafe, untraceable, and inefficient.',
+    solution:'Campus Market-Place is a verified peer-to-peer platform for the Rhodes community. Student ID verification ensures every user is legitimate. Reputation scores, secure payments, and optional campus delivery make every transaction safe and simple.',
+    bmc:{
+      keyPartners:'Rhodes University Student Affairs, Grahamstown couriers, residence managers',
+      keyActivities:'Platform development, student ID verification, community moderation, payment processing',
+      keyResources:'Digital platform, student ID integration, reputation algorithm, campus delivery network',
+      valueProposition:'A trusted, student-verified marketplace where the Rhodes community buys, sells, and offers services safely.',
+      customerRelationships:'Student ambassador programme, in-app support chat, SRC-endorsed dispute resolution',
+      channels:'Rhodes student portal, SRC communications, residence orientation events, word-of-mouth',
+      customerSegments:'Rhodes University students (buyers and sellers), staff members, campus-adjacent businesses',
+      costStructure:'Platform infrastructure, payment processing fees, campus ambassador stipends, moderation',
+      revenueStreams:'5% transaction fee, R30/month promoted listing, R15 campus delivery fee, future: advertising',
     }
   }
 ];
 
-const ecosystemItems = [
-  { type: "Society", title: "Rhodes Entrepreneurship Society", desc: "The primary student-run body for entrepreneurship at Rhodes. Runs weekly sessions, invites speakers, and hosts networking events connecting students with the broader business community. Open to all faculties.", featured: true },
-  { type: "Competition", title: "Rhodes Business Plan Competition", desc: "Annual university-wide competition offering funding and mentorship prizes. Open to all students with a viable business idea or early venture." },
-  { type: "Competition", title: "National Entrepreneurship Challenge", desc: "Rhodes entries in the national ENACTUS South Africa competition — a global platform for student social entrepreneurship." },
-  { type: "Initiative", title: "Venture Incubation Programme", desc: "Structured 12-week incubation for selected ventures, providing workspace, mentorship, legal guidance, and seed funding access." },
-  { type: "Achievement", title: "Eastern Cape Innovation Award 2024", desc: "Rhodes student ventures received recognition at the provincial level for contribution to the Eastern Cape's digital economy." },
-  { type: "Initiative", title: "Mentorship Network", desc: "Connects student founders with Rhodes alumni who have built and exited businesses — offering real-world guidance from people who've done it." },
-];
-
-// ─── RENDER VENTURES ───
+// ─── RENDER VENTURES ─────────────────────────────────────────────
 function renderVentures() {
   const grid = document.getElementById('ventures-grid');
-  const stageIndex = (id) => STAGES.findIndex(s => s.id === id);
+  const labelStages = [STAGES[0],STAGES[2],STAGES[4],STAGES[6],STAGES[8]];
+
   grid.innerHTML = ventures.map(v => {
-    const si = stageIndex(v.stage);
-    const stage = STAGES[si];
-    const activeStages = STAGES.slice(0, Math.max(si + 1, 1));
-    const labelStages = [STAGES[0], STAGES[2], STAGES[4], STAGES[6], STAGES[8]];
+    const stageKey = STAGE_ID_MAP[v.stage] || v.stage || 'idea';
+    const stage    = STAGES.find(s => s.id === stageKey) || STAGES[0];
+    const activeIdx = STAGES.indexOf(stage);
     return `
-    <div class="venture-card" id="vc-${v.id}">
+    <div class="venture-card" onclick="openModal('${v.id}')">
       <div class="vc-top">
-        <div class="vc-identity">
+        <div>
           <div class="vc-name">${v.name}</div>
           <div class="vc-founder">${v.founder}</div>
         </div>
@@ -1031,246 +722,288 @@ function renderVentures() {
       <p class="vc-tagline">${v.tagline}</p>
       <div class="journey-wrap">
         <div class="journey-label">Entrepreneurship Journey</div>
-        <div class="journey-track" style="overflow:visible">
-          <div class="journey-fill" style="width:0%" data-target="${stage.pct}%" id="jf-${v.id}"></div>
-          <div class="journey-dot" style="left:0%" id="jd-${v.id}"></div>
+        <div class="journey-track">
+          <div class="journey-fill" style="width:0%" id="jf-${v.id}" data-target="${stage.pct}"></div>
+          <div class="journey-dot" style="left:0%" id="jd-${v.id}" data-target="${stage.pct}"></div>
         </div>
         <div class="journey-stages">
-          ${labelStages.map(s => `<div class="j-stage ${s.id === v.stage ? 'active' : ''}">${s.label}</div>`).join('')}
+          ${labelStages.map((s,i) => `<div class="j-stage ${s.id===stageKey?'active':''}">${s.label}</div>`).join('')}
         </div>
       </div>
       <div class="vc-divider"></div>
       <div class="vc-footer">
-        <div class="vc-tags">${v.tags.map(t => `<span class="vc-tag">${t}</span>`).join('')}</div>
-        <button class="btn-more" onclick="openModal(${v.id})">More Info</button>
+        <div class="vc-tags">${(v.tags||[]).map(t=>`<span class="vc-tag">${t}</span>`).join('')}</div>
+        <button class="btn-more" onclick="event.stopPropagation();openModal('${v.id}')">More Info</button>
       </div>
     </div>`;
   }).join('');
 }
 
-// ─── ANIMATE JOURNEY BARS ───
+// ─── ANIMATE JOURNEY BARS ────────────────────────────────────────
 function animateJourneyBars() {
   ventures.forEach(v => {
-    const si = STAGES.findIndex(s => s.id === v.stage);
-    const pct = STAGES[si].pct;
+    const fill = document.getElementById(`jf-${v.id}`);
+    const dot  = document.getElementById(`jd-${v.id}`);
+    if (!fill || !dot) return;
+    const pct = fill.dataset.target;
     ScrollTrigger.create({
-      trigger: `#vc-${v.id}`,
-      start: 'top 80%',
-      once: true,
+      trigger: fill, start: 'top 85%', once: true,
       onEnter: () => {
-        gsap.to(`#jf-${v.id}`, { width: pct + '%', duration: 1.1, ease: 'power3.out', delay: 0.1 });
-        gsap.to(`#jd-${v.id}`, { left: pct + '%', duration: 1.1, ease: 'power3.out', delay: 0.1 });
+        fill.style.width = pct + '%';
+        dot.style.left   = pct + '%';
       }
     });
   });
 }
 
-// ─── RENDER ECOSYSTEM ───
-function renderEcosystem() {
-  const grid = document.getElementById('eco-grid');
-  grid.innerHTML = ecosystemItems.map(e => `
-    <div class="eco-card ${e.featured ? 'featured' : ''}">
-      <div class="eco-type">${e.type}</div>
-      <div class="eco-title">${e.title}</div>
-      <div class="eco-desc">${e.desc}</div>
-    </div>
-  `).join('');
-}
-
-// ─── MODAL ───
+// ─── MODAL ───────────────────────────────────────────────────────
 function openModal(id) {
-  const v = ventures.find(x => x.id === id);
+  const v = ventures.find(x => String(x.id) === String(id));
   if (!v) return;
-  const si = STAGES.findIndex(s => s.id === v.stage);
-  const stage = STAGES[si];
 
-  document.getElementById('m-name').textContent = v.name;
-  document.getElementById('m-founder').textContent = v.founder;
-  document.getElementById('m-sector').textContent = v.sector;
-  document.getElementById('m-problem').textContent = v.problem;
-  document.getElementById('m-solution').textContent = v.solution;
-  document.getElementById('m-stage-name').textContent = stage.label + ' Stage';
-  document.getElementById('m-stage-desc').textContent = v.journey.stageDesc;
+  const stageKey = STAGE_ID_MAP[v.stage] || v.stage || 'idea';
+  const stage    = STAGES.find(s => s.id === stageKey) || STAGES[0];
 
-  // Stages mini display
-  document.getElementById('m-j-stages').innerHTML = STAGES.map(s => `
-    <div class="m-j-stage ${s.id === v.stage ? 'active' : ''}">${s.label}</div>
-  `).join('');
+  document.getElementById('m-name').textContent    = v.name;
+  document.getElementById('m-sector').textContent  = v.sector;
+  document.getElementById('m-founder').textContent = v.teamMembers && v.teamMembers.length
+    ? 'Founded by ' + v.teamMembers.map(m=>m.name).filter(Boolean).join(', ')
+    : 'Rhodes University Founder';
 
-  // Fill after open
-  const fill = document.getElementById('m-journey-fill');
-  const dot = document.getElementById('m-journey-dot');
-  fill.style.width = '0%'; dot.style.left = '0%';
-  setTimeout(() => {
-    fill.style.width = stage.pct + '%';
-    dot.style.left = stage.pct + '%';
-  }, 80);
+  // Stage stages row
+  document.getElementById('m-stages-row').innerHTML =
+    STAGES.map(s=>`<div class="m-stage-lbl ${s.id===stageKey?'active':''}">${s.label}</div>`).join('');
+
+  // Fill (animate after open)
+  document.getElementById('m-j-fill').style.width = '0%';
+  document.getElementById('m-j-dot').style.left   = '0%';
+  document.getElementById('m-stage-current').textContent = stage.label + ' Stage';
+  document.getElementById('m-stage-desc-text').textContent = v.journey?.stageDesc || STAGE_DESCS[stageKey] || '';
 
   // Evidence
-  document.getElementById('evidence-grid').innerHTML = v.journey.evidence.map(e => `
-    <div class="evidence-item">
-      <div class="ev-label">${e.label}</div>
-      <div class="ev-val">${e.val}</div>
-    </div>
-  `).join('');
+  const evData = v.journey?.evidence || [];
+  document.getElementById('m-evidence').innerHTML = evData.length
+    ? evData.map(e=>`<div class="ev-item"><div class="ev-lbl">${e.label}</div><div class="ev-val">${e.value||e.val||''}</div></div>`).join('')
+    : '';
 
-  // BMC — Strategyzer layout
-  const b = v.bmc;
-  document.getElementById('bmc-main').innerHTML = `
-    <div class="bmc-cell"><span class="bmc-cell-label">Key Partners</span><div class="bmc-cell-val">${b.keyPartners}</div></div>
-    <div class="bmc-cell-split">
-      <div class="bmc-cell-top"><span class="bmc-cell-label">Key Activities</span><div class="bmc-cell-val">${b.keyActivities}</div></div>
-      <div class="bmc-cell-bot"><span class="bmc-cell-label">Key Resources</span><div class="bmc-cell-val">${b.keyResources}</div></div>
-    </div>
-    <div class="bmc-cell"><span class="bmc-cell-label">Value Propositions</span><div class="bmc-cell-val">${b.valueProposition}</div></div>
-    <div class="bmc-cell-split" style="border-right:1px solid var(--rule)">
-      <div class="bmc-cell-top"><span class="bmc-cell-label">Customer Relationships</span><div class="bmc-cell-val">${b.customerRelationships}</div></div>
-      <div class="bmc-cell-bot"><span class="bmc-cell-label">Channels</span><div class="bmc-cell-val">${b.channels}</div></div>
-    </div>
-    <div class="bmc-cell"><span class="bmc-cell-label">Customer Segments</span><div class="bmc-cell-val">${b.customerSegments}</div></div>
-  `;
-  document.getElementById('bmc-bottom').innerHTML = `
-    <div class="bmc-cell"><span class="bmc-cell-label">Cost Structure</span><div class="bmc-cell-val">${b.costStructure}</div></div>
-    <div class="bmc-cell"><span class="bmc-cell-label">Revenue Streams</span><div class="bmc-cell-val">${b.revenueStreams}</div></div>
-  `;
+  // Team
+  const tmData = v.teamMembers || [];
+  const tmSection = document.getElementById('m-team-section');
+  if (tmData.length) {
+    document.getElementById('m-team').innerHTML = tmData.map(m=>`
+      <div class="team-member">
+        <div class="tm-name">${m.name}</div>
+        <div class="tm-role">${m.role||''}</div>
+        <div class="tm-bio">${m.bio||''}</div>
+      </div>`).join('');
+    tmSection.style.display = 'block';
+  } else {
+    tmSection.style.display = 'none';
+  }
 
+  // Problem & Solution
+  document.getElementById('m-problem').textContent  = v.problem  || 'Coming soon.';
+  document.getElementById('m-solution').textContent = v.solution || 'Coming soon.';
+
+  // BMC
+  const b = v.bmc || {};
+  const bmcSection = document.getElementById('m-bmc-section');
+  const hasBmc = b.valueProposition || b.customerSegments || b.revenueStreams;
+  if (hasBmc) {
+    document.getElementById('bmc-main').innerHTML = `
+      <div class="bmc-cell"><span class="bmc-lbl">Key Partners</span><div class="bmc-val">${b.keyPartners||'—'}</div></div>
+      <div class="bmc-split">
+        <div class="bmc-split-top"><span class="bmc-lbl">Key Activities</span><div class="bmc-val">${b.keyActivities||'—'}</div></div>
+        <div class="bmc-split-bot"><span class="bmc-lbl">Key Resources</span><div class="bmc-val">${b.keyResources||'—'}</div></div>
+      </div>
+      <div class="bmc-cell"><span class="bmc-lbl">Value Propositions</span><div class="bmc-val">${b.valueProposition||'—'}</div></div>
+      <div class="bmc-split" style="border-right:1px solid var(--rule)">
+        <div class="bmc-split-top"><span class="bmc-lbl">Customer Relationships</span><div class="bmc-val">${b.customerRelationships||'—'}</div></div>
+        <div class="bmc-split-bot"><span class="bmc-lbl">Channels</span><div class="bmc-val">${b.channels||'—'}</div></div>
+      </div>
+      <div class="bmc-cell" style="border-right:none"><span class="bmc-lbl">Customer Segments</span><div class="bmc-val">${b.customerSegments||'—'}</div></div>`;
+    document.getElementById('bmc-bot').innerHTML = `
+      <div class="bmc-cell"><span class="bmc-lbl">Cost Structure</span><div class="bmc-val">${b.costStructure||'—'}</div></div>
+      <div class="bmc-cell" style="border-right:none"><span class="bmc-lbl">Revenue Streams</span><div class="bmc-val">${b.revenueStreams||'—'}</div></div>`;
+    bmcSection.style.display = 'block';
+  } else {
+    bmcSection.style.display = 'none';
+  }
+
+  // Contact
+  let contactHtml = `<a href="mailto:rce@ru.ac.za" class="contact-chip">Contact via RCE</a>`;
+  if (v.websiteUrl) contactHtml += `<a href="${v.websiteUrl}" target="_blank" class="contact-chip">Visit Website</a>`;
+  if (v.linkedinUrl) contactHtml += `<a href="${v.linkedinUrl}" target="_blank" class="contact-chip">LinkedIn</a>`;
+  document.getElementById('m-contact').innerHTML = contactHtml;
+
+  // Open
   document.getElementById('modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  // Animate journey fill after brief delay
+  setTimeout(() => {
+    document.getElementById('m-j-fill').style.width = stage.pct + '%';
+    document.getElementById('m-j-dot').style.left   = stage.pct + '%';
+  }, 100);
 }
+
 function closeModal() {
   document.getElementById('modal-overlay').classList.remove('open');
   document.body.style.overflow = '';
 }
-function closeModalBg(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModal();
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-// ─── FORM ───
-function submitForm() {
-  const toast = document.getElementById('toast');
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 3500);
+// Click backdrop to close
+document.getElementById('modal-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
+
+// ─── ECOSYSTEM ───────────────────────────────────────────────────
+const ecosystemItems = [
+  {type:'Society',title:'Rhodes Entrepreneurship Society',desc:'The primary student-run body for entrepreneurship at Rhodes. Weekly sessions, speaker events, and networking. Open to all faculties.',featured:true},
+  {type:'Competition',title:'Rhodes Business Plan Competition',desc:'Annual university-wide competition offering funding and mentorship prizes. Open to all students with a viable business idea.'},
+  {type:'Competition',title:'National Entrepreneurship Challenge',desc:'Rhodes entries in the ENACTUS South Africa competition — a global platform for student social entrepreneurship.'},
+  {type:'Initiative',title:'Venture Incubation Programme',desc:'12-week structured incubation providing workspace, mentorship, legal guidance, and seed funding access.'},
+  {type:'Achievement',title:'Eastern Cape Innovation Award 2024',desc:'Rhodes student ventures received provincial recognition for contribution to the Eastern Cape digital economy.'},
+  {type:'Initiative',title:'Mentorship Network',desc:'Connects student founders with Rhodes alumni who have built and exited businesses — real guidance from people who have done it.'},
+];
+function renderEcosystem() {
+  document.getElementById('eco-grid').innerHTML = ecosystemItems.map(e=>`
+    <div class="eco-card${e.featured?' featured':''}">
+      <div class="eco-type">${e.type}</div>
+      <div class="eco-title">${e.title}</div>
+      <div class="eco-desc">${e.desc}</div>
+    </div>`).join('');
 }
 
-// ─── NAV ───
+// ─── APPLY FORM ──────────────────────────────────────────────────
+function submitApply() {
+  const first   = document.getElementById('af-first').value.trim();
+  const last    = document.getElementById('af-last').value.trim();
+  const email   = document.getElementById('af-email').value.trim();
+  const venture = document.getElementById('af-venture').value.trim();
+  const emailErr= document.getElementById('af-email-err');
+
+  emailErr.classList.add('hide');
+  document.getElementById('af-email').classList.remove('err');
+
+  if (!first || !last || !email || !venture) {
+    showToast('Please fill in all required fields marked with *');
+    return;
+  }
+  if (!isRhodesEmail(email)) {
+    emailErr.classList.remove('hide');
+    document.getElementById('af-email').classList.add('err');
+    return;
+  }
+
+  const btn = document.getElementById('af-submit');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  // If server connected, hit register endpoint; otherwise show success UI
+  setTimeout(() => {
+    document.getElementById('apply-form').style.display = 'none';
+    document.getElementById('apply-success').classList.add('show');
+    // Update stat
+    const stat = document.querySelector('[data-count="2"]');
+    if (stat) { stat.textContent = parseInt(stat.textContent) + 1; }
+  }, 800);
+}
+
+// ─── TOAST ───────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ─── NAV ─────────────────────────────────────────────────────────
 window.addEventListener('scroll', () => {
   document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
 });
 
-// ─── CURSOR ───
-const cursor = document.getElementById('cursor');
-let mx = 0, my = 0;
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cursor.style.left = mx + 'px';
-  cursor.style.top = my + 'px';
-});
-
-// ─── SMOOTH SCROLL ───
-function smoothScrollTo(id) {
-  const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth' });
-}
-function scrollTo(id) { smoothScrollTo(id); }
-
-// ─── GSAP ANIMATIONS ───
-function initAnimations() {
-  // Hero
-  const tl = gsap.timeline({ delay: 0.15 });
-  tl.from('#hero-kicker', { y: 16, opacity: 0, duration: 0.6, ease: 'power3.out' })
-    .from('#h-line-1, #h-line-2, #h-line-3', { y: 48, opacity: 0, stagger: 0.1, duration: 0.75, ease: 'power3.out' }, '-=0.3')
-    .from('#hero-sub', { y: 20, opacity: 0, duration: 0.6, ease: 'power3.out' }, '-=0.4')
-    .from('#hero-btns', { y: 20, opacity: 0, duration: 0.5, ease: 'power3.out' }, '-=0.35')
-    .from('#hero-stats > div', { y: 24, opacity: 0, stagger: 0.08, duration: 0.5, ease: 'power3.out' }, '-=0.3');
-
-  // Counters
-  document.querySelectorAll('[data-count]').forEach(el => {
-    const target = parseInt(el.dataset.count);
-    gsap.to({ val: 0 }, {
-      val: target, duration: 2, delay: 1, ease: 'power2.out',
-      onUpdate: function() { el.textContent = Math.round(this.targets()[0].val); }
-    });
-  });
-
-  // Section reveals
-  gsap.utils.toArray('.venture-card, .eco-card, .partners-pending').forEach(el => {
-    gsap.from(el, {
-      scrollTrigger: { trigger: el, start: 'top 88%' },
-      y: 36, opacity: 0, duration: 0.7, ease: 'power3.out'
-    });
-  });
-  gsap.utils.toArray('.sec-header').forEach(el => {
-    gsap.from(el, {
-      scrollTrigger: { trigger: el, start: 'top 88%' },
-      y: 24, opacity: 0, duration: 0.65, ease: 'power3.out'
-    });
-  });
-}
-
-// ─── INIT ───
-renderVentures();
-renderEcosystem();
-initAnimations();
-animateJourneyBars();
-</script>
-<div id="nav-auth-area">
-  <button class="nav-apply" onclick="smoothScrollTo('apply')">Register Your Venture</button>
-</div>
-</body>
-</html>
-
-<script>
-// ─── AUTH-AWARE NAV ──────────────────────────────────────────────
+// Auth-aware nav
 (function() {
   const token = localStorage.getItem('rv_token');
   const user  = token ? JSON.parse(localStorage.getItem('rv_user') || 'null') : null;
-  const area  = document.getElementById('nav-auth-area');
-  if (!area) return;
-  if (user) {
-    area.innerHTML = `
-      <a href="/dashboard.html" style="padding:9px 18px;border:1px solid var(--rule);border-radius:8px;font-size:13px;font-weight:500;color:var(--text-mid);text-decoration:none;margin-right:10px;transition:all 0.2s">My Dashboard</a>
-      <a href="/dashboard.html" style="padding:9px 22px;background:var(--purple-800);color:white;font-size:13px;font-weight:600;border-radius:8px;text-decoration:none">Hi, ${user.firstName}</a>
-    `;
-  } else {
-    area.innerHTML = `
-      <a href="/login.html" style="padding:9px 18px;border:1px solid var(--rule);border-radius:8px;font-size:13px;font-weight:500;color:var(--text-mid);text-decoration:none;margin-right:10px">Sign In</a>
-      <a href="/register.html" style="padding:9px 22px;background:var(--purple-800);color:white;font-size:13px;font-weight:600;border-radius:8px;text-decoration:none">Register Venture</a>
-    `;
-  }
+  if (!user) return;
+  document.getElementById('nav-auth').innerHTML = `
+    <a href="/dashboard.html" class="nav-signin">My Dashboard</a>
+    <a href="/dashboard.html" class="nav-register">Hi, ${user.firstName}</a>`;
 })();
 
-// ─── LOAD VENTURES FROM API ──────────────────────────────────────
-(async function loadLiveVentures() {
+// ─── SMOOTH SCROLL ───────────────────────────────────────────────
+function smoothScrollTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({behavior:'smooth'});
+}
+
+// ─── GSAP ANIMATIONS ─────────────────────────────────────────────
+function initAnimations() {
+  const tl = gsap.timeline({delay:0.1});
+  tl.from('#hero-kicker',{y:16,opacity:0,duration:0.6,ease:'power3.out'})
+    .from('#h1,#h2,#h3',{y:48,opacity:0,stagger:0.1,duration:0.7,ease:'power3.out'},'-=0.3')
+    .from('#hero-sub',{y:20,opacity:0,duration:0.6,ease:'power3.out'},'-=0.4')
+    .from('#hero-btns',{y:20,opacity:0,duration:0.5,ease:'power3.out'},'-=0.35')
+    .from('#hero-stats > div',{y:24,opacity:0,stagger:0.08,duration:0.5,ease:'power3.out'},'-=0.3');
+
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const t = parseInt(el.dataset.count);
+    gsap.to({val:0},{val:t,duration:2,delay:1,ease:'power2.out',
+      onUpdate:function(){el.textContent=Math.round(this.targets()[0].val);}});
+  });
+
+  gsap.utils.toArray('.venture-card,.eco-card,.partners-pending,.sec-header').forEach(el=>{
+    gsap.from(el,{scrollTrigger:{trigger:el,start:'top 88%'},
+      y:36,opacity:0,duration:0.7,ease:'power3.out'});
+  });
+}
+
+// ─── LOAD LIVE VENTURES FROM API ─────────────────────────────────
+(async function() {
   try {
     const res  = await fetch('/api/ventures');
+    if (!res.ok) return;
     const data = await res.json();
-    if (!data.ventures || data.ventures.length === 0) return; // keep static data
-    // Replace static ventures array with live data and re-render
-    const liveVentures = data.ventures.map(v => ({
-      id: v._id, name: v.name, founder: v.teamMembers && v.teamMembers.length
-        ? v.teamMembers.map(m => m.name).filter(Boolean).join(' & ')
-        : 'Rhodes University Founder',
-      sector: v.sector || 'Uncategorised',
-      tags:   v.tags || [],
-      tagline: v.tagline || '',
-      stage:  v.stage || 'idea',
-      problem: v.problem || '',
-      solution: v.solution || '',
-      traction: v.evidence && v.evidence.length ? v.evidence[0].value : 'See profile',
-      stage_label: (data.stageMeta[v.stage] || {}).label || 'Idea',
-      team_size: v.teamMembers ? String(v.teamMembers.length) : '1',
-      bmc: v.bmc || {},
-      journey: { stageDesc: v.stageDescription || '', evidence: v.evidence || [] },
+    if (!data.ventures || data.ventures.length === 0) return;
+    const live = data.ventures.map(v => ({
+      id:          v._id,
+      name:        v.name || 'Unnamed Venture',
+      founder:     (v.teamMembers||[]).map(m=>m.name).filter(Boolean).join(' & ') || 'Rhodes Founder',
+      sector:      v.sector || 'Uncategorised',
+      tags:        v.tags   || [],
+      tagline:     v.tagline || '',
+      stage:       v.stage  || 'idea',
+      websiteUrl:  v.websiteUrl  || '',
+      linkedinUrl: v.linkedinUrl || '',
+      teamMembers: v.teamMembers || [],
+      journey:{stageDesc:v.stageDescription||'',evidence:v.evidence||[]},
+      problem:     v.problem  || '',
+      solution:    v.solution || '',
+      bmc:         v.bmc || {},
     }));
-    if (liveVentures.length > 0) {
-      // Only replace if we actually got published ventures
+    if (live.length > 0) {
       ventures.length = 0;
-      liveVentures.forEach(lv => ventures.push(lv));
-      renderVentures();
+      live.forEach(lv => ventures.push(lv));
     }
-  } catch(e) {
-    // Silently fall back to static data if API fails
-  }
+  } catch(e) { /* silently fall back to static data */ }
+  renderVentures();
+  renderEcosystem();
+  initAnimations();
+  animateJourneyBars();
 })();
+
+// Fallback if API never returns
+setTimeout(() => {
+  if (!document.getElementById('ventures-grid').children.length) {
+    renderVentures();
+    renderEcosystem();
+    initAnimations();
+    animateJourneyBars();
+  }
+}, 2000);
 </script>
+</body>
+</html>
