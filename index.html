@@ -152,6 +152,29 @@
         .btn-primary:hover {
             background-color: var(--purple-900);
         }
+        /* Section Formatting */
+        section { padding: 5rem 5%; background: var(--white); }
+        .section-header { text-align: center; margin-bottom: 3.5rem; }
+        .kicker { color: var(--purple-600); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; display: block; margin-bottom: 0.5rem;}
+        
+        /* Directory Grid & Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2.5rem; max-width: 1200px; margin: 0 auto; }
+        .venture-card { border: 1px solid var(--rule); border-radius: 8px; padding: 2.5rem; transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; background: var(--white); display: flex; flex-direction: column; }
+        .venture-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(30, 10, 74, 0.08); border-color: var(--purple-200); }
+        .badge { display: inline-block; padding: 0.35rem 0.85rem; background: var(--purple-100); color: var(--purple-800); border-radius: 50px; font-size: 0.8rem; font-weight: 500; margin-bottom: 1.5rem; align-self: flex-start; }
+        .venture-card h3 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+        
+        /* Journey Tracker */
+        .journey-container { margin: 2rem 0; padding-top: 1.5rem; border-top: 1px solid var(--rule); flex-grow: 1; }
+        .journey-track { height: 6px; background: var(--purple-100); border-radius: 3px; position: relative; overflow: hidden; margin-bottom: 0.75rem; }
+        .journey-fill { height: 100%; background: var(--purple-600); width: 0%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
+        .journey-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-soft); font-family: 'DM Mono', monospace; }
+        
+        /* Modal Foundation */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26, 16, 37, 0.85); z-index: 100; overflow-y: auto; padding: 2rem 5%; backdrop-filter: blur(4px); }
+        .modal-content { background: var(--white); max-width: 1000px; margin: 2rem auto; border-radius: 12px; padding: 4rem; position: relative; opacity: 0; transform: translateY(20px); }
+        .close-modal { position: absolute; top: 1.5rem; right: 2rem; background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--text-soft); transition: color 0.2s; }
+        .close-modal:hover { color: var(--purple-900); }
     </style>
 </head>
 <body>
@@ -175,6 +198,46 @@
             </div>
         </div>
     </header>
+    <section id="ventures">
+        <div class="section-header gsap-reveal">
+            <span class="kicker">The Directory</span>
+            <h2>Featured Student Ventures</h2>
+        </div>
+        <div class="grid">
+            
+            <!-- Venture Card: Campus Market-Place -->
+            <div class="venture-card gsap-reveal">
+                <span class="badge">Campus Commerce</span>
+                <h3>Campus Market-Place</h3>
+                <p class="data-text" style="font-size: 0.85rem; color: var(--text-mid); margin-bottom: 1rem;">Founder: Siyamthanda Mpini</p>
+                <p style="color: var(--text-mid);">Peer-to-peer marketplace connecting the university community for goods and services.</p>
+                
+                <div class="journey-container">
+                    <p style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--purple-900);">Journey Stage: Early Revenue</p>
+                    <div class="journey-track"><div class="journey-fill" data-progress="82%"></div></div>
+                    <div class="journey-labels">
+                        <span>Idea</span><span>Pilot</span><span>Scale</span>
+                    </div>
+                </div>
+                
+                <button class="btn-primary" style="width: 100%; background: transparent; color: var(--purple-800); border-color: var(--purple-200);" onclick="openModal('campus-marketplace')">More Info</button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Venture Modal Overlay -->
+    <div id="ventureModal" class="modal">
+        <div class="modal-content" id="modalInner">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <span class="badge" id="modalSector">Campus Commerce</span>
+            <h2 id="modalTitle" style="font-size: 2.5rem; margin-bottom: 0.5rem;">Campus Market-Place</h2>
+            <p class="data-text" style="color: var(--text-mid); margin-bottom: 2rem;">Founder: Siyamthanda Mpini</p>
+            <div id="modalBody">
+                <p>Full Business Model Canvas and evidence data will load here...</p>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Initial GSAP Entrance Animations
@@ -186,6 +249,39 @@
             ease: "power3.out",
             delay: 0.2
         });
+        // Trigger Journey Progress Bars on Scroll
+        gsap.utils.toArray('.journey-fill').forEach(bar => {
+            gsap.to(bar, {
+                scrollTrigger: {
+                    trigger: bar,
+                    start: "top 95%"
+                },
+                width: bar.getAttribute('data-progress')
+            });
+        });
+
+        // Modal Controls
+        function openModal(ventureId) {
+            const modal = document.getElementById('ventureModal');
+            const inner = document.getElementById('modalInner');
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            gsap.to(inner, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" });
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('ventureModal');
+            const inner = document.getElementById('modalInner');
+            
+            gsap.to(inner, { 
+                opacity: 0, y: 20, duration: 0.3, ease: "power2.in",
+                onComplete: () => {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
     </script>
 </body>
 </html>
