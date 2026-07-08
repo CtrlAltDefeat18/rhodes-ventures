@@ -3,32 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rhodes Ventures</title>
+    <title>Rhodes Ventures | Centre for Entrepreneurship</title>
+    
+    <!-- Fonts: Cormorant Garamond, DM Sans, DM Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- GSAP for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
     <style>
-        body {
+        /* Design Tokens from Spec */
+        :root {
+            --purple-900: #1E0A4A;
+            --purple-800: #3D1A80;
+            --purple-600: #6D40C4;
+            --purple-400: #9B7FE8;
+            --purple-200: #D9D0FF;
+            --purple-100: #F0ECFF;
+            --text: #1A1025;
+            --text-mid: #4A4060;
+            --text-soft: #8A7FA0;
+            --rule: #E8E4F0;
+            --white: #FFFFFF;
+            --off-white: #F8F7FF;
+            --page-bg: #FAFAFA;
+        }
+
+        /* Base Editorial Reset */
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #1E0A4A 0%, #FFFFFF 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: sans-serif;
-            color: #1A1025;
         }
-        .card {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            text-align: center;
+
+        body {
+            background-color: var(--page-bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4, h5, .display-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+            color: var(--purple-900);
+        }
+
+        .data-text {
+            font-family: 'DM Mono', monospace;
+        }
+
+        /* Hero Section Pattern */
+        .hero {
+            min-height: 90vh;
+            background: linear-gradient(135deg, var(--purple-900) 0%, var(--purple-400) 50%, var(--white) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: linear-gradient(var(--rule) 1px, transparent 1px), linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+
+        .hero h1 i {
+            font-style: italic;
+            color: var(--purple-200);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--purple-100);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+        }
+
+        /* Top Navigation */
+        nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--purple-200);
+        }
+
+        .btn-primary {
+            background-color: var(--purple-800);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            border: 1px solid var(--purple-600);
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--purple-900);
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>Rhodes Ventures</h1>
-        <p>CfERI Platform Deployment in Progress...</p>
-    </div>
+
+    <nav>
+        <a href="index.html" class="logo">Rhodes Ventures</a>
+        <div class="nav-links">
+            <a href="#ventures">Student Ventures</a>
+            <a href="#ecosystem">Ecosystem</a>
+            <a href="programs.html">Programs</a>
+            <a href="login.html" class="btn-primary">Sign In</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="gsap-reveal">Rhodes University's<br><i>Innovators & Changemakers</i></h1>
+            <p class="hero-subtitle gsap-reveal">The official directory and management platform for student ventures emerging from the Centre for Entrepreneurship and Rapid Incubator.</p>
+            <div class="gsap-reveal">
+                <a href="#ventures" class="btn-primary" style="background-color: var(--white); color: var(--purple-900);">Browse Ventures</a>
+            </div>
+        </div>
+    </header>
+
+    <script>
+        // Initial GSAP Entrance Animations
+        gsap.from(".gsap-reveal", {
+            y: 30,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power3.out",
+            delay: 0.2
+        });
+    </script>
 </body>
 </html>
